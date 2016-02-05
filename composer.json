@@ -1,0 +1,35 @@
+{
+    "name": "skagarwal/google-places-api",
+    "description": "Google Places Api",
+    "type": "library",
+    "keywords": [
+        "Google",
+        "Places",
+        "Google Places",
+        "Google Places Api",
+        "Google Api"
+    ],
+    "time": "2016-02-05",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sachin Agarwal",
+            "email": "sachinkumaragarwal05@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "illuminate/support": "~5.0",
+        "illuminate/container": "~5.0",
+        "guzzlehttp/guzzle": "^6.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0",
+        "skagarwal/reflection": "~1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "SKAgarwal\\GoogleApi\\": "src/"
+        }
+    }
+}
