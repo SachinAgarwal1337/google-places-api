@@ -28,6 +28,10 @@
         "skagarwal/reflection": "~1.0"
     },
     "autoload": {
+        "files": [
+            "helpers/functions.php"
+        ],
+
         "psr-4": {
             "SKAgarwal\\GoogleApi\\": "src/"
         }
