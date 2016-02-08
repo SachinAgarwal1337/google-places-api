@@ -1,12 +1,10 @@
 <?php
-namespace SkAgarwal\GooglePlacesApi;
+namespace SKAgarwal\GoogleApi;
 
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
-use SkAgarwal\GoogleApi\PlacesApi;
 
-class ServiceProvier extends BaseServiceProvider
+class ServiceProvider extends BaseServiceProvider
 {
-
     /**
      * Register the service provider.
      *
@@ -27,10 +25,10 @@ class ServiceProvier extends BaseServiceProvider
      */
     public function boot()
     {
-        $configFile  = __DIR__.'/../config/google.php';
+        $configFile = __DIR__ . '/../config/google.php';
 
         $this->publishes([
-           $configFile => config_path('google.php')
+            $configFile => config_path('google.php'),
         ]);
     }
 }
