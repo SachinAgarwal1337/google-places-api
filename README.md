@@ -159,7 +159,11 @@ This will return the `API KEY` been used with the requests.
 ### setKey($key)
 This will set the `API KEY`.
 
-## License
+# Contribution
+Feel free to report issues or make Pull Requests.
+If you find this document can be improved in any way, please feel free to open an issue for it.
+
+# License
 
 The Google Places Api is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
 
