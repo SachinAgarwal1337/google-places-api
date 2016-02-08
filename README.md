@@ -6,7 +6,7 @@ This is a PHP wrapper for **Google Places Api Web Service**. And is [Laravel Fra
 With just 2 lines of code you can request to any google places api feature. No need to manually perform any curl requests.
 
 ### The following place requests are available:
-* [Place Searches](#nearby-search) return a list of places based on a user's location or search string.
+* [Place Search](#place-search) return a list of places based on a user's location or search string.
 * [Place Details](#place-details) requests return more detailed information about a specific Place, including user reviews.
 * [Place Autocomplete](#place-autocomplete) can be used to automatically fill in the name and/or address of a place as you type.
 * [Query Autocomplete](#query-autocomplete) can be used to provide a query prediction service for text-based geographic searches, by returning suggested queries as you type.
@@ -161,5 +161,5 @@ This will set the `API KEY`.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+The Google Places Api is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
 
