@@ -14,7 +14,7 @@ With just 2 lines of code you can request to any google places api feature. No n
 # Installation
 Install it with composer
 ```
-composer requrire skagarwal/google-places-api
+composer require skagarwal/google-places-api
 ```
 
 
