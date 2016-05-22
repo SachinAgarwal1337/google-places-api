@@ -80,7 +80,7 @@ SKAgarwal\GoogleApi\ServiceProvider::class,
 ## Step 2
 publish the config file with following artisan command
 ```
-php artisan vendor:publish --provider=SKAgarwal\GoogleApi\ServiceProvider
+php artisan vendor:publish --provider="SKAgarwal\GoogleApi\ServiceProvider"
 ```
 
 This will create **google.php** file in the config directory.
@@ -91,7 +91,7 @@ Set the *API KEY* in this config file.
 Start using the package using Facade.
 
 ```
-$response = GooglePlaces::placesAutocomplete('some city');
+$response = GooglePlaces::placeAutocomplete('some city');
 ```
 
 ---
