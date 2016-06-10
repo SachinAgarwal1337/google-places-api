@@ -298,9 +298,9 @@ class PlacesApi
     private function prepareRadarSearchParams($location, $radius, $params)
     {
         $params['location'] = $location;
-        $prams['radius'] = $radius;
+        $params['radius'] = $radius;
 
-        if (!array_any_keys_exists(['keyword', 'name', '$type'], $params)) {
+        if (!array_any_keys_exists(['keyword', 'name', 'types'], $params)) {
             throw new GooglePlacesApiException("Radar Search require one"
                 . " or more of 'keyword', 'name', or 'types' params.");
         }

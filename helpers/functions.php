@@ -14,7 +14,7 @@ if (!function_exists('array_any_keys_exists')) {
         $result = false;
 
         foreach ($keys as $key) {
-            $result = $result OR array_key_exists($key, $array);
+            $result = $result || array_key_exists($key, $array);
         }
 
         return $result;
