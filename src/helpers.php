@@ -11,12 +11,10 @@ if (!function_exists('array_any_keys_exists')) {
      */
     function array_any_keys_exists(array $keys, array $array)
     {
-        $result = false;
-
         foreach ($keys as $key) {
-            $result = $result OR array_key_exists($key, $array);
+            if (array_key_exists($key, $array)) {
+                return true;
+            }
         }
-
-        return $result;
     }
 }

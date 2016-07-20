@@ -276,9 +276,9 @@ class PlacesApi
         ) {
             unset($params['radius']);
 
-            if (!array_any_keys_exists(['keyword', 'name', 'types'], $params)) {
+            if (!array_any_keys_exists(['keyword', 'name', 'type'], $params)) {
                 throw new GooglePlacesApiException("Nearby Search require one"
-                    . " or more of 'keyword', 'name', or 'types' params since 'rankby' = 'distance'.");
+                    . " or more of 'keyword', 'name', or 'type' params since 'rankby' = 'distance'.");
             }
         } elseif (!$radius) {
             throw new GooglePlacesApiException("'radius' param is not defined.");
@@ -302,7 +302,7 @@ class PlacesApi
 
         if (!array_any_keys_exists(['keyword', 'name', 'type'], $params)) {
             throw new GooglePlacesApiException("Radar Search require one"
-                . " or more of 'keyword', 'name', or 'types' params.");
+                . " or more of 'keyword', 'name', or 'type' params.");
         }
 
         return $params;
