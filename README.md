@@ -47,11 +47,9 @@ As mentioned earlier just 2 lines of code to make any request.
 ```php
 use SKAgarwal\GoogleApi\PlacesApi;
 
+$googlePlaces = new PlacesApi('API_KEY'); # line 1
+$response = $googlePlaces->placeAutocomplete('some input'); # line 2
 
-function () {
-  $googlePlaces = new PlacesApi('API_KEY') # line 1
-  $response = $googlePlaces->placeAutocomplete('some input'); # line 2
-}
 
 ```
 
