@@ -57,11 +57,14 @@ class PlacesApi
      * @return \Illuminate\Support\Collection
      * @throws \SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException
      */
-    public function nearbySearch($location, $radius = null, $params = [])
+    public function nearbySearch($location=null, $radius = null, $params = [])
     {
         $this->checkKey();
 
-        $params = $this->prepareNearbySearchParams($location, $radius, $params);
+        if (!array_key_exists('pagetoken', $params)){
+            $params = $this->prepareNearbySearchParams($location, $radius, $params);
+        }
+        
         $response = $this->makeRequest(self::NEARBY_SEARCH_URL, $params);
 
         return $this->convertToCollection($response, 'results');
