@@ -18,6 +18,8 @@ class PlacesApi
 
     const QUERY_AUTOCOMPLETE_URL = 'queryautocomplete/json';
 
+    const PLACE_ADD_URL = 'add/json';
+
     /**
      * @var
      */
@@ -84,7 +86,7 @@ class PlacesApi
         $response = $this->makeRequest(self::TEXT_SEARCH_URL, $params);
 
         return $this->convertToCollection($response, 'results');
-        
+
     }
 
     /**
@@ -165,6 +167,23 @@ class PlacesApi
         $response = $this->makeRequest(self::QUERY_AUTOCOMPLETE_URL, $params);
 
         return $this->convertToCollection($response, 'predictions');
+    }
+
+    /**
+     * Adds a place to Google's database
+     *
+     * @param $params
+     *
+     * @return \Illuminate\Support\Collection
+     * @throws GooglePlacesApiException
+     */
+    public function addPlace($params)
+    {
+        $this->checkKey();
+
+        $response = $this->makeRequest(self::PLACE_ADD_URL, $params);
+
+        return $this->convertToCollection($response);
     }
 
     /**
