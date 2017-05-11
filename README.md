@@ -39,7 +39,7 @@ use SKAgarwal\GoogleApi\PlacesApi;
 $googlePlaces = new PlacesApi('API KEY');
 ```
 
-**Note:** You can also set the **API KEY** after initaiting the class using `setKey('KEY')` method. You can chain this with method with anyother methods.
+**Note:** You can also set the **API KEY** after initiating the class using `setKey('KEY')` method. You can chain this with method with any other methods.
 
 ## Step 3 - Start Using the Api.
 Example:
@@ -105,7 +105,7 @@ $response = GooglePlaces::placeAutocomplete('some city');
 The response returned is a [Laravel's Collection](https://laravel.com/docs/5.2/collections) so that you can perform any of the available collection methods on it.
 
 <blockquote>
-If you are not familiar with <em>Laravel's Collecton</em> you can either reference the docs <a href="https://laravel.com/docs/5.2/collections">here</a> or you can use <strong>response</strong> as simple array.
+If you are not familiar with <em>Laravel's Collection</em> you can either reference the docs <a href="https://laravel.com/docs/5.2/collections">here</a> or you can use <strong>response</strong> as simple array.
 </blockquote>
 
 ---
@@ -115,19 +115,19 @@ If you are not familiar with <em>Laravel's Collecton</em> you can either referen
 <a name=place-search></a>
 ## Place Search
 ### nearbySearch($location, $radius = null, $params = [])
-* `location` — The latitude/longitude around which to retrieve place information. This must be specified as latitude,longitude.
+* `location` — The latitude/longitude around which to retrieve place information. This must be specified as latitude, longitude.
 * 'radius' — Defines the distance (in meters) within which to return place results. The maximum allowed radius is 50 000 meters. Note that `radius` must not be included if `rankby=distance` (described under **Optional parameters** below) is specified.
 * If `rankby=distance` (described under **Optional parameters** below) is specified, then one or more of `keyword`, `name`, or `types` is required.
-* `params` - **Optionan Parameters** You can refer all the avaiable optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/search)
+* `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/search)
 
 ### textSearch($query, $params = [])
 * `query` — The text string on which to search, for example: "restaurant". The Google Places service will return candidate matches based on this string and order the results based on their perceived relevance.
-* `params` - **Optionan Parameters** You can refer all the avaiable optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/search)
+* `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/search)
 
 ### radarSearch($location, $radius, array $params)
-* `location` — The latitude/longitude around which to retrieve place information. This must be specified as latitude,longitude.
+* `location` — The latitude/longitude around which to retrieve place information. This must be specified as latitude, longitude.
 * `radius` — Defines the distance (in meters) within which to return place results. The maximum allowed radius is 50 000 meters.
-* `params` - **Optionan Parameters** You can refer all the avaiable optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/search)
+* `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/search)
 
 **Note:** A Radar Search request must include at least one of `keyword`, `name`, or `types`.
 
@@ -137,7 +137,7 @@ If you are not familiar with <em>Laravel's Collecton</em> you can either referen
 # Place Details
 ### placeDetails($placeId, $params = [])
 * `placeId` — A textual identifier that uniquely identifies a place, returned from a Place Search.
-* `params` - **Optionan Parameters** You can refer all the avaiable optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/details)
+* `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/details)
 
 ---
 
@@ -145,7 +145,7 @@ If you are not familiar with <em>Laravel's Collecton</em> you can either referen
 # Place Autocomplete
 ### placeAutocomplete($input, $params = [])
 * `input` — The text string on which to search. The Place Autocomplete service will return candidate matches based on this string and order results based on their perceived relevance.
-* `params` - **Optionan Parameters** You can refer all the avaiable optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/autocomplete)
+* `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/autocomplete)
 
 ---
 
@@ -153,11 +153,11 @@ If you are not familiar with <em>Laravel's Collecton</em> you can either referen
 # Query Autocomplete
 ### queryAutocomplete($input, $params = [])
 * `input` — The text string on which to search. The Places service will return candidate matches based on this string and order results based on their perceived relevance.
-* `params` - **Optionan Parameters** You can refer all the avaiable optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/query)
+* `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/query)
 
 # Additional Methods
 ### getStatus()
-This will return the status of the response send by google api. Use it after making any reqquest.
+This will return the status of the response send by google api. Use it after making any request.
 
 ### getKey()
 This will return the `API KEY` been used with the requests.

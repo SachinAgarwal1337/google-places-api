@@ -18,6 +18,8 @@ class PlacesApi
 
     const QUERY_AUTOCOMPLETE_URL = 'queryautocomplete/json';
 
+    const PLACE_ADD_URL = 'add/json';
+
     /**
      * @var
      */
@@ -84,7 +86,7 @@ class PlacesApi
         $response = $this->makeRequest(self::TEXT_SEARCH_URL, $params);
 
         return $this->convertToCollection($response, 'results');
-        
+
     }
 
     /**
@@ -168,13 +170,31 @@ class PlacesApi
     }
 
     /**
+     * Adds a place to Google's database
+     *
+     * @param $params
+     *
+     * @return \Illuminate\Support\Collection
+     * @throws GooglePlacesApiException
+     */
+    public function addPlace($params)
+    {
+        $this->checkKey();
+
+        $response = $this->makeRequest(self::PLACE_ADD_URL, $params, 'post');
+
+        return $this->convertToCollection($response);
+    }
+
+    /**
      * @param $uri
      * @param $params
+     * @param $method
      *
      * @return mixed|string
      * @throws \SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException
      */
-    private function makeRequest($uri, $params)
+    private function makeRequest($uri, $params, $method = 'get')
     {
         $options = [
             'query' => [
@@ -182,10 +202,14 @@ class PlacesApi
             ],
         ];
 
-        $options['query'] = array_merge($options['query'], $params);
+        if ($method == 'post') {
+            $options = array_merge(['body' => json_encode($params)], $options);
+        } else {
+            $options['query'] = array_merge($options['query'], $params);
+        }
 
-        $response = json_decode($this->client->get($uri, $options)
-                                             ->getBody()->getContents(), true);
+        $response = json_decode($this->client->$method($uri, $options)
+            ->getBody()->getContents(), true);
 
         $this->setStatus($response['status']);
 
