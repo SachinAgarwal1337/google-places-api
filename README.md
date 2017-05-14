@@ -16,6 +16,7 @@ With just 2 lines of code you can request to any google places api feature. No n
 * [Place Details](#place-details) requests return more detailed information about a specific Place, including user reviews.
 * [Place Autocomplete](#place-autocomplete) can be used to automatically fill in the name and/or address of a place as you type.
 * [Query Autocomplete](#query-autocomplete) can be used to provide a query prediction service for text-based geographic searches, by returning suggested queries as you type.
+* [Place Add](#place-add) can be used to add a place to Google's Place database
 
 # Installation
 Install it with composer
@@ -154,6 +155,11 @@ If you are not familiar with <em>Laravel's Collection</em> you can either refere
 ### queryAutocomplete($input, $params = [])
 * `input` — The text string on which to search. The Places service will return candidate matches based on this string and order results based on their perceived relevance.
 * `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/query)
+
+<a name=place-add></a>
+# Place Add
+### addPlace($params)
+* `params` - The set of key-value parameters necessary to add a place to Google. You can refer to the fields on [Google's Official Webpage regarding Place Add](https://developers.google.com/places/web-service/add-place)
 
 # Additional Methods
 ### getStatus()
