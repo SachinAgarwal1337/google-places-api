@@ -12,11 +12,11 @@ This is a PHP wrapper for **Google Places Api Web Service**. And is [Laravel Fra
 With just 2 lines of code you can request to any google places api feature. No need to manually perform any curl requests.
 
 ### The following place requests are available:
-* [Place Search](#place-search) return a list of places based on a user's location or search string.
-* [Place Details](#place-details) requests return more detailed information about a specific Place, including user reviews.
-* [Place Autocomplete](#place-autocomplete) can be used to automatically fill in the name and/or address of a place as you type.
-* [Query Autocomplete](#query-autocomplete) can be used to provide a query prediction service for text-based geographic searches, by returning suggested queries as you type.
-* [Place Add](#place-add) can be used to add a place to Google's Place database
+* [Place Search](#place-search) This service gives a list of places based on a user's location or search string.
+* [Place Details](#place-details) This service gives more detailed information about a specific Place, including user reviews.
+* [Place Autocomplete](#place-autocomplete) This service is Used to automatically fill in the name and/or address of a place as you type.
+* [Query Autocomplete](#query-autocomplete) This service is Used to provide a query prediction service for text-based geographic searches, by returning suggested queries as you type.
+* [Place Add](#place-add) This service Used to Add/Delete a place to Google's Place database
 
 # Installation
 Install it with composer
@@ -125,7 +125,8 @@ If you are not familiar with <em>Laravel's Collection</em> you can either refere
 * `query` — The text string on which to search, for example: "restaurant". The Google Places service will return candidate matches based on this string and order the results based on their perceived relevance.
 * `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/search)
 
-### radarSearch($location, $radius, array $params)
+### radarSearch($location, $radius, array $params) 
+_**(This method is depricated, and will be removed when google removes it from the api)**_
 * `location` — The latitude/longitude around which to retrieve place information. This must be specified as latitude, longitude.
 * `radius` — Defines the distance (in meters) within which to return place results. The maximum allowed radius is 50 000 meters.
 * `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/search)
@@ -159,7 +160,12 @@ If you are not familiar with <em>Laravel's Collection</em> you can either refere
 <a name=place-add></a>
 # Place Add
 ### addPlace($params)
+_**(This method is depricated, and will be removed when google removes it from the api)**_
 * `params` - The set of key-value parameters necessary to add a place to Google. You can refer to the fields on [Google's Official Webpage regarding Place Add](https://developers.google.com/places/web-service/add-place)
+
+### deletePlace($palceId)
+_**(This method is depricated, and will be removed when google removes it from the api)**_
+* `placeId` - The Place Id you want to delete.
 
 # Additional Methods
 ### getStatus()
