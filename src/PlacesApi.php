@@ -247,7 +247,7 @@ class PlacesApi
             AND $response['status'] !== 'ZERO_RESULTS') {
             throw new GooglePlacesApiException(
                 "Response returned with status: " . $response['status'] . "\n" .
-                "Error Messae: {$response['error_message']}"
+                array_key_exists('error_message', $response) ?: "Error Message: {$response['error_message']}"
             );
         }
         
