@@ -247,7 +247,7 @@ class PlacesApi
             AND $response['status'] !== 'ZERO_RESULTS') {
             throw new GooglePlacesApiException(
                 "Response returned with status: " . $response['status'] . "\n" .
-                "Error Messae: {$response['error_message']}"
+                array_key_exists('error_message', $response) ?: "Error Message: {$response['error_message']}"
             );
         }
         
@@ -256,6 +256,7 @@ class PlacesApi
     
     /**
      * @param array $data
+     * @param null $index
      *
      * @return \Illuminate\Support\Collection
      */
@@ -296,6 +297,8 @@ class PlacesApi
     
     /**
      * @param null $key
+     *
+     * @return $this
      */
     public function setKey($key)
     {
@@ -321,6 +324,7 @@ class PlacesApi
      * @param $radius
      * @param $params
      *
+     * @return mixed
      * @throws \SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException
      */
     private function prepareNearbySearchParams($location, $radius, $params)
