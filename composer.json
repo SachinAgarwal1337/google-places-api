@@ -40,7 +40,10 @@
         "laravel": {
             "providers": [
                 "SKAgarwal\\GoogleApi\\ServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "GooglePlaces": "SKAgarwal\\GoogleApi\\Facade"
+            }
         }
     },
 }
