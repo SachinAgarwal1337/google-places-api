@@ -35,5 +35,15 @@
         "psr-4": {
             "SKAgarwal\\GoogleApi\\": "src/"
         }
-    }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "SKAgarwal\\GoogleApi\\ServiceProvider"
+            ],
+            "aliases": {
+                "GooglePlaces": "SKAgarwal\\GoogleApi\\Facade"
+            }
+        }
+    },
 }
