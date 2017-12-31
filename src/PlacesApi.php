@@ -39,11 +39,17 @@ class PlacesApi
     private $client;
     
     /**
+     * @var bool
+     */
+    private $verifySSL = true;
+    
+    /**
      * PlacesApi constructor.
      *
      * @param null $key
+     * @param bool $verifySSL
      */
-    public function __construct($key = null)
+    public function __construct($key = null, $verifySSL = true)
     {
         $this->key = $key;
         
@@ -142,6 +148,7 @@ class PlacesApi
      * @param array $params
      *
      * @return \Illuminate\Support\Collection
+     * @throws \SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException
      */
     public function placeAutocomplete($input, $params = [])
     {
@@ -236,6 +243,8 @@ class PlacesApi
             $options['query'] = array_merge($options['query'], $params);
         }
         
+        $options['verify'] = $this->verifySSL;
+        
         $response = json_decode(
             $this->client->$method($uri, $options)->getBody()->getContents(),
             true
@@ -247,7 +256,8 @@ class PlacesApi
             AND $response['status'] !== 'ZERO_RESULTS') {
             throw new GooglePlacesApiException(
                 "Response returned with status: " . $response['status'] . "\n" .
-                array_key_exists('error_message', $response) ?: "Error Message: {$response['error_message']}"
+                array_key_exists('error_message', $response)
+                    ?: "Error Message: {$response['error_message']}"
             );
         }
         
@@ -367,5 +377,17 @@ class PlacesApi
         }
         
         return $params;
+    }
+    
+    /**
+     * @param bool $verifySSL
+     *
+     * @return PlacesApi
+     */
+    public function verifySSL($verifySSL = true)
+    {
+        $this->verifySSL = $verifySSL;
+        
+        return $this;
     }
 }
