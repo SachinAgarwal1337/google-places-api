@@ -17,6 +17,7 @@ With just 2 lines of code you can request to any google places api feature. No n
 * [Place Autocomplete](#place-autocomplete) This service is Used to automatically fill in the name and/or address of a place as you type.
 * [Query Autocomplete](#query-autocomplete) This service is Used to provide a query prediction service for text-based geographic searches, by returning suggested queries as you type.
 * [Place Add](#place-add) This service Used to Add/Delete a place to Google's Place database
+* [Additional Methods](#additional-methods) Additional Methods Available.
 
 # Installation
 Install it with composer
@@ -66,6 +67,10 @@ function () {
 
 <a name=laravel-usage></a>
 # Use with Laravel
+## For Laravel 5.5
+Auto Discovery added.
+
+## For Laravel 5.4 and below
 ## Step 1
 Set up the service provider and facade in the **config\app.php**
 ```php
@@ -167,6 +172,7 @@ _**(This method is depricated, and will be removed when google removes it from t
 _**(This method is depricated, and will be removed when google removes it from the api)**_
 * `placeId` - The Place Id you want to delete.
 
+<a name=additional-methods></a>
 # Additional Methods
 ### getStatus()
 This will return the status of the response send by google api. Use it after making any request.
@@ -176,6 +182,11 @@ This will return the `API KEY` been used with the requests.
 
 ### setKey($key)
 This will set the `API KEY`.
+
+### verifySSL($verifySSL = true)
+You can pass `false` to disable Verification of SSL Certification.
+
+Or You can Pass the path to the certificate.
 
 # Contribution
 Feel free to report issues or make Pull Requests.
