@@ -256,7 +256,8 @@ class PlacesApi
             AND $response['status'] !== 'ZERO_RESULTS') {
             throw new GooglePlacesApiException(
                 "Response returned with status: " . $response['status'] . "\n" .
-                array_key_exists('error_message', $response) ?: "Error Message: {$response['error_message']}"
+                array_key_exists('error_message', $response)
+                    ?: "Error Message: {$response['error_message']}"
             );
         }
         
@@ -388,5 +389,5 @@ class PlacesApi
         $this->verifySSL = $verifySSL;
         
         return $this;
-}
+    }
 }
