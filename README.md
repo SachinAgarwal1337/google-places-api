@@ -4,7 +4,7 @@
 [![License](https://poser.pugx.org/skagarwal/google-places-api/license?format=flat-square)](https://packagist.org/packages/skagarwal/google-places-api)
 
 
-# Google Places APi.
+# Google Places API.
 
 This is a PHP wrapper for **Google Places Api Web Service**. And is [Laravel Framework](https://laravel.com/docs/5.2) friendly.
 
@@ -17,6 +17,7 @@ With just 2 lines of code you can request to any google places api feature. No n
 * [Place Autocomplete](#place-autocomplete) This service is Used to automatically fill in the name and/or address of a place as you type.
 * [Query Autocomplete](#query-autocomplete) This service is Used to provide a query prediction service for text-based geographic searches, by returning suggested queries as you type.
 * [Place Add](#place-add) This service Used to Add/Delete a place to Google's Place database
+* [Place Photo](#place-photo) This gives you access to the millions of photos stored in the Google's Places database
 * [Additional Methods](#additional-methods) Additional Methods Available.
 
 # Installation
@@ -162,6 +163,8 @@ _**(This method is depricated, and will be removed when google removes it from t
 * `input` — The text string on which to search. The Places service will return candidate matches based on this string and order results based on their perceived relevance.
 * `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/query)
 
+---
+
 <a name=place-add></a>
 # Place Add
 ### addPlace($params)
@@ -171,6 +174,13 @@ _**(This method is depricated, and will be removed when google removes it from t
 ### deletePlace($palceId)
 _**(This method is depricated, and will be removed when google removes it from the api)**_
 * `placeId` - The Place Id you want to delete.
+
+---
+
+<a name=place-photo></a>
+# Place Photo
+### photo($photoReference, $params = [])
+* `params` - The set of key-value parameters necessary to add a place to Google. You can refer to the fields on [Google's Official Webpage regarding Place Add](https://developers.google.com/places/web-service/photos)
 
 <a name=additional-methods></a>
 # Additional Methods
