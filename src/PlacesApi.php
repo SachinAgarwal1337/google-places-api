@@ -3,10 +3,13 @@
 namespace SKAgarwal\GoogleApi;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\TransferStats;
 use SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException;
 
 class PlacesApi
 {
+    const BASE_URL = 'https://maps.googleapis.com/maps/api/place/';
+    
     const NEARBY_SEARCH_URL = 'nearbysearch/json';
     
     const TEXT_SEARCH_URL = 'textsearch/json';
@@ -22,6 +25,8 @@ class PlacesApi
     const PLACE_ADD_URL = 'add/json';
     
     const PLACE_DELETE_URL = 'delete/json';
+    
+    const PLACE_PHOTO_URL = 'photo';
     
     /**
      * @var
@@ -54,7 +59,7 @@ class PlacesApi
         $this->key = $key;
         
         $this->client = new Client([
-            'base_uri' => 'https://maps.googleapis.com/maps/api/place/',
+            'base_uri' => self::BASE_URL,
         ]);
     }
     
@@ -139,6 +144,36 @@ class PlacesApi
         $response = $this->makeRequest(self::DETAILS_SEARCH_URL, $params);
         
         return $this->convertToCollection($response);
+    }
+    
+    /**
+     * @param $photoReference
+     * @param array $params
+     *
+     * @return mixed|string
+     * @throws \SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException
+     */
+    public function photo($photoReference, $params = [])
+    {
+        $this->checkKey();
+        
+        $params['photoreference'] = $photoReference;
+        
+        if (!array_any_keys_exists(['maxwidth', 'maxheight'], $params)) {
+            throw new GooglePlacesApiException('maxwidth or maxheight param is required');
+        }
+        
+        $options = $this->getOptions($params);
+        
+        $url = '';
+        
+        $options['on_stats'] = function (TransferStats $stats) use (&$url) {
+            $url = $stats->getEffectiveUri();
+        };
+        
+        $this->client->get(self::PLACE_PHOTO_URL, $options);
+        
+        return (string) $url;
     }
     
     /**
@@ -231,19 +266,7 @@ class PlacesApi
      */
     private function makeRequest($uri, $params, $method = 'get')
     {
-        $options = [
-            'query' => [
-                'key' => $this->key,
-            ],
-        ];
-        
-        if ($method == 'post') {
-            $options = array_merge(['body' => json_encode($params)], $options);
-        } else {
-            $options['query'] = array_merge($options['query'], $params);
-        }
-        
-        $options['verify'] = $this->verifySSL;
+        $options = $this->getOptions($params, $method);
         
         $response = json_decode(
             $this->client->$method($uri, $options)->getBody()->getContents(),
@@ -389,5 +412,32 @@ class PlacesApi
         $this->verifySSL = $verifySSL;
         
         return $this;
+    }
+    
+    /**
+     * @param array $params
+     * @param string $method
+     *
+     * @return array
+     */
+    private function getOptions($params, $method = 'get')
+    {
+        $options = [
+            'query' => [
+                'key' => $this->key,
+            ],
+        ];
+        
+        if ($method == 'post') {
+            $options = array_merge(['body' => json_encode($params)], $options);
+        } else {
+            $options['query'] = array_merge($options['query'], $params);
+        }
+        
+        $options['http_errors'] = false;
+        
+        $options['verify'] = $this->verifySSL;
+        
+        return $options;
     }
 }
