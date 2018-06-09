@@ -57,6 +57,8 @@ class PlacesApi
     public function __construct($key = null, $verifySSL = true)
     {
         $this->key = $key;
+
+        $this->verifySSL = $verifySSL;
         
         $this->client = new Client([
             'base_uri' => self::BASE_URL,
