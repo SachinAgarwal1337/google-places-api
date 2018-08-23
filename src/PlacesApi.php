@@ -27,6 +27,8 @@ class PlacesApi
     const PLACE_DELETE_URL = 'delete/json';
     
     const PLACE_PHOTO_URL = 'photo';
+
+    const FIND_PLACE = 'findplacefromtext/json';
     
     /**
      * @var
@@ -102,7 +104,27 @@ class PlacesApi
         $response = $this->makeRequest(self::TEXT_SEARCH_URL, $params);
         
         return $this->convertToCollection($response, 'results');
-        
+    }
+
+    /**
+     * Find Place Request to google places api.
+     *
+     * @param string $query (for example, a name, address, or phone number)
+     * @param string $queryType (textquery or phonenumber)
+     * @param array $params
+     *
+     * @return \Illuminate\Support\Collection
+     * @throws \SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException
+     */
+    public function findPlaceSearch($query, $queryType, $params = [])
+    {
+        $this->checkKey();
+
+        $params['input'] = $query;
+        $params['inputtype'] = $queryType;
+        $response = $this->makeRequest(self::FIND_PLACE, $params);
+
+        return $this->convertToCollection($response, 'candidates');
     }
     
     /**
