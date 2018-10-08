@@ -14,7 +14,7 @@ class PlacesApi
     
     const TEXT_SEARCH_URL = 'textsearch/json';
     
-    const RADAR_SEARCH_URL = 'radarsearch/json';
+    const FIND_PLACE = 'findplacefromtext/json';
     
     const DETAILS_SEARCH_URL = 'details/json';
     
@@ -27,6 +27,8 @@ class PlacesApi
     const PLACE_DELETE_URL = 'delete/json';
     
     const PLACE_PHOTO_URL = 'photo';
+    
+    
     
     /**
      * @var
@@ -63,6 +65,29 @@ class PlacesApi
         $this->client = new Client([
             'base_uri' => self::BASE_URL,
         ]);
+    }
+    
+    /**
+     * Find Place Request to google places api.
+     *
+     * @param string $input (for example, a name, address, or phone number)
+     * @param string $inputType (textquery or phonenumber)
+     * @param array $params
+     *
+     * @return \Illuminate\Support\Collection
+     * @throws \SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException
+     */
+    public function findPlace($input, $inputType, $params = [])
+    {
+        $this->checkKey();
+        
+        $params['input'] = $input;
+        
+        $params['inputtype'] = $inputType;
+        
+        $response = $this->makeRequest(self::FIND_PLACE, $params);
+        
+        return $this->convertToCollection($response, 'candidates');
     }
     
     /**
@@ -103,29 +128,6 @@ class PlacesApi
         
         return $this->convertToCollection($response, 'results');
         
-    }
-    
-    /**
-     * Radar Search Request to google api
-     *
-     * @param $location
-     * @param $radius
-     * @param $params
-     *
-     * @deprecated
-     *
-     * @return \Illuminate\Support\Collection
-     * @throws \SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException
-     */
-    public function radarSearch($location, $radius, array $params)
-    {
-        $this->checkKey();
-        
-        $params = $this->prepareRadarSearchParams($location, $radius, $params);
-        
-        $response = $this->makeRequest(self::RADAR_SEARCH_URL, $params);
-        
-        return $this->convertToCollection($response, 'results');
     }
     
     /**
@@ -216,46 +218,6 @@ class PlacesApi
         $response = $this->makeRequest(self::QUERY_AUTOCOMPLETE_URL, $params);
         
         return $this->convertToCollection($response, 'predictions');
-    }
-    
-    /**
-     * Adds a place to Google's database
-     *
-     * @param $params
-     *
-     * @deprecated
-     *
-     * @return \Illuminate\Support\Collection
-     * @throws GooglePlacesApiException
-     */
-    public function addPlace($params)
-    {
-        $this->checkKey();
-        
-        $response = $this->makeRequest(self::PLACE_ADD_URL, $params, 'post');
-        
-        return $this->convertToCollection($response);
-    }
-    
-    /**
-     * Adds a place to Google's database
-     *
-     * @param $placeId
-     *
-     * @deprecated
-     *
-     * @return \Illuminate\Support\Collection
-     * @throws GooglePlacesApiException
-     */
-    public function deletePlace($placeId)
-    {
-        $this->checkKey();
-        
-        $params['place_id'] = $placeId;
-        
-        $response = $this->makeRequest(self::PLACE_DELETE_URL, $params, 'post');
-        
-        return $this->convertToCollection($response);
     }
     
     /**
@@ -378,27 +340,6 @@ class PlacesApi
             }
         } elseif (!$radius) {
             throw new GooglePlacesApiException("'radius' param is not defined.");
-        }
-        
-        return $params;
-    }
-    
-    /**
-     * @param $location
-     * @param $radius
-     * @param $params
-     *
-     * @return mixed
-     * @throws \SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException
-     */
-    private function prepareRadarSearchParams($location, $radius, $params)
-    {
-        $params['location'] = $location;
-        $params['radius'] = $radius;
-        
-        if (!array_any_keys_exists(['keyword', 'name', 'type'], $params)) {
-            throw new GooglePlacesApiException("Radar Search require one"
-                . " or more of 'keyword', 'name', or 'type' params.");
         }
         
         return $params;
