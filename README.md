@@ -6,7 +6,7 @@
 
 # Google Places API.
 
-This is a PHP wrapper for **Google Places Api Web Service**. And is [Laravel Framework](https://laravel.com/docs/5.2) friendly.
+This is a PHP wrapper for **Google Places API Web Service**. And is [Laravel Framework](https://laravel.com/docs/5.2) friendly.
 
 ## About Package
 With just 2 lines of code you can request to any google places api feature. No need to manually perform any curl requests.
@@ -16,7 +16,6 @@ With just 2 lines of code you can request to any google places api feature. No n
 * [Place Details](#place-details) This service gives more detailed information about a specific Place, including user reviews.
 * [Place Autocomplete](#place-autocomplete) This service is Used to automatically fill in the name and/or address of a place as you type.
 * [Query Autocomplete](#query-autocomplete) This service is Used to provide a query prediction service for text-based geographic searches, by returning suggested queries as you type.
-* [Place Add](#place-add) This service Used to Add/Delete a place to Google's Place database
 * [Place Photo](#place-photo) This gives you access to the millions of photos stored in the Google's Places database
 * [Additional Methods](#additional-methods) Additional Methods Available.
 
@@ -131,13 +130,10 @@ If you are not familiar with <em>Laravel's Collection</em> you can either refere
 * `query` — The text string on which to search, for example: "restaurant". The Google Places service will return candidate matches based on this string and order the results based on their perceived relevance.
 * `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/search)
 
-### radarSearch($location, $radius, array $params) 
-_**(This method is depricated, and will be removed when google removes it from the api)**_
-* `location` — The latitude/longitude around which to retrieve place information. This must be specified as latitude, longitude.
-* `radius` — Defines the distance (in meters) within which to return place results. The maximum allowed radius is 50 000 meters.
-* `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/search)
-
-**Note:** A Radar Search request must include at least one of `keyword`, `name`, or `types`.
+### findPlace($input, $inputType, $params = []) 
+* `input` — The text input specifying which place to search for (for example, a name, address, or phone number).
+* `inputType` — The type of input. This can be one of either textquery or phonenumber. Phone numbers must be in international format (prefixed by a plus sign ("+"), followed by the country code, then the phone number itself).
+* `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/search#FindPlaceRequests)
 
 ---
 
@@ -165,22 +161,12 @@ _**(This method is depricated, and will be removed when google removes it from t
 
 ---
 
-<a name=place-add></a>
-# Place Add
-### addPlace($params)
-_**(This method is depricated, and will be removed when google removes it from the api)**_
-* `params` - The set of key-value parameters necessary to add a place to Google. You can refer to the fields on [Google's Official Webpage regarding Place Add](https://developers.google.com/places/web-service/add-place)
-
-### deletePlace($palceId)
-_**(This method is depricated, and will be removed when google removes it from the api)**_
-* `placeId` - The Place Id you want to delete.
-
----
-
 <a name=place-photo></a>
 # Place Photo
 ### photo($photoReference, $params = [])
 * `params` - The set of key-value parameters necessary to add a place to Google. You can refer to the fields on [Google's Official Webpage regarding Place Add](https://developers.google.com/places/web-service/photos)
+
+---
 
 <a name=additional-methods></a>
 # Additional Methods
