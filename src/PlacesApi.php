@@ -240,7 +240,8 @@ class PlacesApi
         $this->setStatus($response['status']);
         
         if ($response['status'] !== 'OK'
-            AND $response['status'] !== 'ZERO_RESULTS') {
+            AND $response['status'] !== 'ZERO_RESULTS'
+            AND $response['status'] !== 'OVER_QUERY_LIMIT') {
             throw new GooglePlacesApiException(
                 "Response returned with status: " . $response['status'] . "\n" .
                 array_key_exists('error_message', $response)
