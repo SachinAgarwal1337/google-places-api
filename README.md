@@ -17,6 +17,7 @@ With just 2 lines of code you can request to any google places api feature. No n
 * [Place Autocomplete](#place-autocomplete) This service is Used to automatically fill in the name and/or address of a place as you type.
 * [Query Autocomplete](#query-autocomplete) This service is Used to provide a query prediction service for text-based geographic searches, by returning suggested queries as you type.
 * [Place Photo](#place-photo) This gives you access to the millions of photos stored in the Google's Places database
+* [Custom Headers](#custom-headers) Set Custom Headers.
 * [Additional Methods](#additional-methods) Additional Methods Available.
 
 # Installation
@@ -168,6 +169,18 @@ If you are not familiar with <em>Laravel's Collection</em> you can either refere
 
 ---
 
+<a name=custom-headers></a>
+# Custom Headers
+### withHeaders(array $headers)
+Call This method before any other methods to set the headers. You can chain this method.
+
+### new PlacesApi($key = null, $verifySSL = true, array $headers = [])
+To have custom headers set for every call, you can pass 3rd parameter as the headers to class constructor.
+
+**Note:** For Laravel Users, you can set this in config file with key `headers`
+
+---
+
 <a name=additional-methods></a>
 # Additional Methods
 ### getStatus()
@@ -181,6 +194,8 @@ This will set the `API KEY`.
 
 ### verifySSL($verifySSL = true)
 You can pass `false` to disable Verification of SSL Certification.
+
+**Note:** For Laravel Users, you can set this in config file with key `verify_ssl` 
 
 Or You can Pass the path to the certificate.
 
