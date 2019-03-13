@@ -28,8 +28,6 @@ class PlacesApi
     
     const PLACE_PHOTO_URL = 'photo';
     
-    
-    
     /**
      * @var
      */
@@ -51,19 +49,25 @@ class PlacesApi
     private $verifySSL = true;
     
     /**
+     * @var array
+     */
+    private $headers = [];
+    
+    /**
      * PlacesApi constructor.
      *
      * @param null $key
      * @param bool $verifySSL
      */
-    public function __construct($key = null, $verifySSL = true)
+    public function __construct($key = null, $verifySSL = true, array $headers = [])
     {
         $this->key = $key;
-
+        
         $this->verifySSL = $verifySSL;
         
         $this->client = new Client([
             'base_uri' => self::BASE_URL,
+            'headers'  => $headers,
         ]);
     }
     
@@ -177,7 +181,7 @@ class PlacesApi
         
         $this->client->get(self::PLACE_PHOTO_URL, $options);
         
-        return (string) $url;
+        return (string)$url;
     }
     
     /**
@@ -380,7 +384,23 @@ class PlacesApi
         $options['http_errors'] = false;
         
         $options['verify'] = $this->verifySSL;
+    
+        if (!empty($this->headers)) {
+            $options['headers'] = $this->headers;
+        }
         
         return $options;
     }
+    
+    /**
+     * @param array $headers
+     *
+     * @return PlacesApi
+     */
+    public function withHeaders(array $headers)
+    {
+        $this->headers = $headers;
+        
+        return $this;
+}
 }
