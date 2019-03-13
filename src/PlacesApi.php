@@ -384,7 +384,7 @@ class PlacesApi
         $options['http_errors'] = false;
         
         $options['verify'] = $this->verifySSL;
-    
+        
         if (!empty($this->headers)) {
             $options['headers'] = $this->headers;
         }
@@ -402,5 +402,5 @@ class PlacesApi
         $this->headers = $headers;
         
         return $this;
-}
+    }
 }

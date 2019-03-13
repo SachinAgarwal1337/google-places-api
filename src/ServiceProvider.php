@@ -15,8 +15,14 @@ class ServiceProvider extends BaseServiceProvider
         $this->app->singleton('GooglePlaces', function ($app) {
             $key = isset($app['config']['google.places.key'])
                 ? $app['config']['google.places.key'] : null;
+            
+            $verifySSL = isset($app['config']['google.places.verify_ssl'])
+                ? $app['config']['google.places.verify_ssl'] : true;
+            
+            $headers = isset($app['config']['google.places.headers'])
+                ? $app['config']['google.places.headers'] : [];
 
-            return new PlacesApi($key);
+            return new PlacesApi($key, $verifySSL, $headers);
         });
     }
 
