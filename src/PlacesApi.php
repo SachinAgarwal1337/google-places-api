@@ -5,6 +5,11 @@ namespace SKAgarwal\GoogleApi;
 use GuzzleHttp\Client;
 use GuzzleHttp\TransferStats;
 use SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException;
+use SKAgarwal\GoogleApi\Exceptions\InvalidRequestException;
+use SKAgarwal\GoogleApi\Exceptions\NotImplementedException;
+use SKAgarwal\GoogleApi\Exceptions\OverQueryLimitException;
+use SKAgarwal\GoogleApi\Exceptions\RequestDeniedException;
+use SKAgarwal\GoogleApi\Exceptions\UnknownErrorException;
 
 class PlacesApi
 {
@@ -243,16 +248,36 @@ class PlacesApi
         
         $this->setStatus($response['status']);
         
-        if ($response['status'] !== 'OK'
-            AND $response['status'] !== 'ZERO_RESULTS') {
-            throw new GooglePlacesApiException(
-                "Response returned with status: " . $response['status'] . "\n" .
-                array_key_exists('error_message', $response)
-                    ?: "Error Message: {$response['error_message']}"
-            );
+        switch($response['status']){
+            case 'OK':
+            case 'ZERO_RESULTS':
+                return $response;
+            case 'INVALID_REQUEST':
+                throw new InvalidRequestException(
+                    "Response returned with status: " . $response['status'],
+                    $response['error_message'] ?? null
+                );
+            case 'OVER_QUERY_LIMIT':
+                throw new OverQueryLimitException(
+                    "Response returned with status: " . $response['status'],
+                    $response['error_message'] ?? null
+                );
+            case 'REQUEST_DENIED':
+                throw new RequestDeniedException(
+                    "Response returned with status: " . $response['status'],
+                    $response['error_message'] ?? null
+                );
+            case 'UNKNOWN_ERROR':
+                throw new UnknownErrorException(
+                    "Response returned with status: " . $response['status'],
+                    $response['error_message'] ?? null
+                );
+            default:
+                throw new NotImplementedException(
+                    "Response returned with status: " . $response['status'],
+                    $response['error_message'] ?? null
+                );
         }
-        
-        return $response;
     }
     
     /**

@@ -1,3 +1,4 @@
+
 [![Latest Stable Version](https://poser.pugx.org/skagarwal/google-places-api/v/stable?format=flat-square)](https://packagist.org/packages/skagarwal/google-places-api)
 [![Latest Unstable Version](https://poser.pugx.org/skagarwal/google-places-api/v/unstable?format=flat-square)](https://packagist.org/packages/skagarwal/google-places-api)
 [![Total Downloads](https://poser.pugx.org/skagarwal/google-places-api/downloads?format=flat-square)](https://packagist.org/packages/skagarwal/google-places-api)
@@ -198,6 +199,21 @@ You can pass `false` to disable Verification of SSL Certification.
 **Note:** For Laravel Users, you can set this in config file with key `verify_ssl` 
 
 Or You can Pass the path to the certificate.
+
+<a name=exceptions></a>
+# Exceptions
+Google Places API may throw various exceptions based on the given `$params` or response and is located in the `SKAgarwal\GoogleApi\Exceptions` namespace.
+
+- A `GooglePlacesApiException` is thrown when no `API KEY` is provided or  `$params` is invalid. 
+**Note:** This is the parent class for the preceding exceptions.
+- A `InvalidRequestException` is thrown when the response `status` is `INVALID_REQUEST`
+- A `OverQueryLimitException` is thrown when  the response `status` is `OVER_QUERY_LIMIT`
+- A `RequestDeniedException` is thrown when  the response `status` is `REQUEST_DENIED`
+- A `UnknownErrorException` is thrown when  the response `status` is `UNKNOWN_ERROR`
+- A `NotImplementedException` is thrown when the response cannot be determined.
+
+If any of these exception has been thrown, you can use the `getErrorMessage()` method to get the `error_message` field from the response if any is provided. 
+**Note:** `error_message` field is not guaranteed to be always present, and its content is subject to change.
 
 # Contribution
 Feel free to report issues or make Pull Requests.
