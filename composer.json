@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php": "^5.5.9|^7.2",
+        "php": "^5.5.9|^7.2|^7.3",
         "illuminate/support": "~5.0|^6.0|^7.0|^8.0",
         "illuminate/container": "~5.0|^6.0|^7.0|^8.0",
         "guzzlehttp/guzzle": "^6.1|^7.0.1"
