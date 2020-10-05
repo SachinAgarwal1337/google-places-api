@@ -14,68 +14,68 @@ use SKAgarwal\GoogleApi\Exceptions\UnknownErrorException;
 class PlacesApi
 {
     const BASE_URL = 'https://maps.googleapis.com/maps/api/place/';
-    
+
     const NEARBY_SEARCH_URL = 'nearbysearch/json';
-    
+
     const TEXT_SEARCH_URL = 'textsearch/json';
-    
+
     const FIND_PLACE = 'findplacefromtext/json';
-    
+
     const DETAILS_SEARCH_URL = 'details/json';
-    
+
     const PLACE_AUTOCOMPLETE_URL = 'autocomplete/json';
-    
+
     const QUERY_AUTOCOMPLETE_URL = 'queryautocomplete/json';
-    
+
     const PLACE_ADD_URL = 'add/json';
-    
+
     const PLACE_DELETE_URL = 'delete/json';
-    
+
     const PLACE_PHOTO_URL = 'photo';
-    
+
     /**
      * @var
      */
     public $status;
-    
+
     /**
      * @var null
      */
     private $key = null;
-    
+
     /**
      * @var \GuzzleHttp\Client
      */
     private $client;
-    
+
     /**
      * @var bool
      */
     private $verifySSL = true;
-    
+
     /**
      * @var array
      */
     private $headers = [];
-    
+
     /**
      * PlacesApi constructor.
      *
      * @param null $key
      * @param bool $verifySSL
      */
-    public function __construct($key = null, $verifySSL = true, array $headers = [])
+    public function __construct($key = null, $verifySSL = true, array $headers = [], array $config = [])
     {
         $this->key = $key;
-        
+
         $this->verifySSL = $verifySSL;
-        
-        $this->client = new Client([
+
+        $this->client = new Client(array_merge([
             'base_uri' => self::BASE_URL,
-            'headers'  => $headers,
-        ]);
+            'headers' => $headers,
+        ], $config));
     }
-    
+
     /**
      * Find Place Request to google places api.
      *
@@ -89,16 +89,16 @@ class PlacesApi
     public function findPlace($input, $inputType, $params = [])
     {
         $this->checkKey();
-        
+
         $params['input'] = $input;
-        
+
         $params['inputtype'] = $inputType;
-        
+
         $response = $this->makeRequest(self::FIND_PLACE, $params);
-        
+
         return $this->convertToCollection($response, 'candidates');
     }
-    
+
     /**
      * Place Nearby Search Request to google api.
      *
@@ -112,13 +112,13 @@ class PlacesApi
     public function nearbySearch($location, $radius = null, $params = [])
     {
         $this->checkKey();
-        
+
         $params = $this->prepareNearbySearchParams($location, $radius, $params);
         $response = $this->makeRequest(self::NEARBY_SEARCH_URL, $params);
-        
+
         return $this->convertToCollection($response, 'results');
     }
-    
+
     /**
      * Place Text Search Request to google places api.
      *
@@ -131,14 +131,13 @@ class PlacesApi
     public function textSearch($query, $params = [])
     {
         $this->checkKey();
-        
+
         $params['query'] = $query;
         $response = $this->makeRequest(self::TEXT_SEARCH_URL, $params);
-        
+
         return $this->convertToCollection($response, 'results');
-        
     }
-    
+
     /**
      * Place Details Request to google places api.
      *
@@ -151,14 +150,14 @@ class PlacesApi
     public function placeDetails($placeId, $params = [])
     {
         $this->checkKey();
-        
+
         $params['placeid'] = $placeId;
-        
+
         $response = $this->makeRequest(self::DETAILS_SEARCH_URL, $params);
-        
+
         return $this->convertToCollection($response);
     }
-    
+
     /**
      * @param $photoReference
      * @param array $params
@@ -169,26 +168,26 @@ class PlacesApi
     public function photo($photoReference, $params = [])
     {
         $this->checkKey();
-        
+
         $params['photoreference'] = $photoReference;
-        
+
         if (!array_any_keys_exists(['maxwidth', 'maxheight'], $params)) {
             throw new GooglePlacesApiException('maxwidth or maxheight param is required');
         }
-        
+
         $options = $this->getOptions($params);
-        
+
         $url = '';
-        
+
         $options['on_stats'] = function (TransferStats $stats) use (&$url) {
             $url = $stats->getEffectiveUri();
         };
-        
+
         $this->client->get(self::PLACE_PHOTO_URL, $options);
-        
+
         return (string)$url;
     }
-    
+
     /**
      * Place AutoComplete Request to google places api.
      *
@@ -201,14 +200,14 @@ class PlacesApi
     public function placeAutocomplete($input, $params = [])
     {
         $this->checkKey();
-        
+
         $params['input'] = $input;
-        
+
         $response = $this->makeRequest(self::PLACE_AUTOCOMPLETE_URL, $params);
-        
+
         return $this->convertToCollection($response, 'predictions');
     }
-    
+
     /**
      * Query AutoComplete Request to the google api.
      *
@@ -221,14 +220,14 @@ class PlacesApi
     public function queryAutocomplete($input, $params = [])
     {
         $this->checkKey();
-        
+
         $params['input'] = $input;
-        
+
         $response = $this->makeRequest(self::QUERY_AUTOCOMPLETE_URL, $params);
-        
+
         return $this->convertToCollection($response, 'predictions');
     }
-    
+
     /**
      * @param $uri
      * @param $params
@@ -240,15 +239,15 @@ class PlacesApi
     private function makeRequest($uri, $params, $method = 'get')
     {
         $options = $this->getOptions($params, $method);
-        
+
         $response = json_decode(
             $this->client->$method($uri, $options)->getBody()->getContents(),
             true
         );
-        
+
         $this->setStatus($response['status']);
-        
-        switch($response['status']){
+
+        switch ($response['status']) {
             case 'OK':
             case 'ZERO_RESULTS':
                 return $response;
@@ -279,7 +278,7 @@ class PlacesApi
                 );
         }
     }
-    
+
     /**
      * @param array $data
      * @param null $index
@@ -289,14 +288,14 @@ class PlacesApi
     private function convertToCollection(array $data, $index = null)
     {
         $data = collect($data);
-        
+
         if ($index) {
             $data[$index] = collect($data[$index]);
         }
-        
+
         return $data;
     }
-    
+
     /**
      * @param mixed $status
      */
@@ -304,7 +303,7 @@ class PlacesApi
     {
         $this->status = $status;
     }
-    
+
     /**
      * @return mixed
      */
@@ -312,7 +311,7 @@ class PlacesApi
     {
         return $this->status;
     }
-    
+
     /**
      * @return null
      */
@@ -320,7 +319,7 @@ class PlacesApi
     {
         return $this->key;
     }
-    
+
     /**
      * @param null $key
      *
@@ -329,10 +328,10 @@ class PlacesApi
     public function setKey($key)
     {
         $this->key = $key;
-        
+
         return $this;
     }
-    
+
     /**
      * @throws \SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException
      */
@@ -342,7 +341,7 @@ class PlacesApi
             throw new GooglePlacesApiException('API KEY is not specified.');
         }
     }
-    
+
     /**
      * Prepare the params for the Place Search.
      *
@@ -357,12 +356,12 @@ class PlacesApi
     {
         $params['location'] = $location;
         $params['radius'] = $radius;
-        
+
         if (array_key_exists('rankby', $params)
             AND $params['rankby'] === 'distance'
         ) {
             unset($params['radius']);
-            
+
             if (!array_any_keys_exists(['keyword', 'name', 'type'], $params)) {
                 throw new GooglePlacesApiException("Nearby Search require one"
                     . " or more of 'keyword', 'name', or 'type' params since 'rankby' = 'distance'.");
@@ -370,10 +369,10 @@ class PlacesApi
         } elseif (!$radius) {
             throw new GooglePlacesApiException("'radius' param is not defined.");
         }
-        
+
         return $params;
     }
-    
+
     /**
      * @param bool $verifySSL
      *
@@ -382,10 +381,10 @@ class PlacesApi
     public function verifySSL($verifySSL = true)
     {
         $this->verifySSL = $verifySSL;
-        
+
         return $this;
     }
-    
+
     /**
      * @param array $params
      * @param string $method
@@ -399,24 +398,24 @@ class PlacesApi
                 'key' => $this->key,
             ],
         ];
-        
+
         if ($method == 'post') {
             $options = array_merge(['body' => json_encode($params)], $options);
         } else {
             $options['query'] = array_merge($options['query'], $params);
         }
-        
+
         $options['http_errors'] = false;
-        
+
         $options['verify'] = $this->verifySSL;
-        
+
         if (!empty($this->headers)) {
             $options['headers'] = $this->headers;
         }
-        
+
         return $options;
     }
-    
+
     /**
      * @param array $headers
      *
@@ -425,7 +424,7 @@ class PlacesApi
     public function withHeaders(array $headers)
     {
         $this->headers = $headers;
-        
+
         return $this;
     }
 }
