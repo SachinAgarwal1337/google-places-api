@@ -4,6 +4,7 @@ namespace SKAgarwal\GoogleApi;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\TransferStats;
+use Illuminate\Support\Collection;
 use SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException;
 use SKAgarwal\GoogleApi\Exceptions\InvalidRequestException;
 use SKAgarwal\GoogleApi\Exceptions\NotImplementedException;
@@ -13,25 +14,25 @@ use SKAgarwal\GoogleApi\Exceptions\UnknownErrorException;
 
 class PlacesApi
 {
-    const BASE_URL = 'https://maps.googleapis.com/maps/api/place/';
+    public const BASE_URL = 'https://maps.googleapis.com/maps/api/place/';
     
-    const NEARBY_SEARCH_URL = 'nearbysearch/json';
+    public const NEARBY_SEARCH_URL = 'nearbysearch/json';
     
-    const TEXT_SEARCH_URL = 'textsearch/json';
+    public const TEXT_SEARCH_URL = 'textsearch/json';
     
-    const FIND_PLACE = 'findplacefromtext/json';
+    public const FIND_PLACE = 'findplacefromtext/json';
     
-    const DETAILS_SEARCH_URL = 'details/json';
+    public const DETAILS_SEARCH_URL = 'details/json';
     
-    const PLACE_AUTOCOMPLETE_URL = 'autocomplete/json';
+    public const PLACE_AUTOCOMPLETE_URL = 'autocomplete/json';
     
-    const QUERY_AUTOCOMPLETE_URL = 'queryautocomplete/json';
+    public const QUERY_AUTOCOMPLETE_URL = 'queryautocomplete/json';
     
-    const PLACE_ADD_URL = 'add/json';
+    public const PLACE_ADD_URL = 'add/json';
     
-    const PLACE_DELETE_URL = 'delete/json';
+    public const PLACE_DELETE_URL = 'delete/json';
     
-    const PLACE_PHOTO_URL = 'photo';
+    public const PLACE_PHOTO_URL = 'photo';
     
     /**
      * @var
@@ -39,9 +40,9 @@ class PlacesApi
     public $status;
     
     /**
-     * @var null
+     * @var null|string
      */
-    private $key = null;
+    private $key;
     
     /**
      * @var \GuzzleHttp\Client
@@ -51,7 +52,7 @@ class PlacesApi
     /**
      * @var bool
      */
-    private $verifySSL = true;
+    private $verifySSL;
     
     /**
      * @var array
@@ -61,10 +62,11 @@ class PlacesApi
     /**
      * PlacesApi constructor.
      *
-     * @param null $key
+     * @param string|null $key
      * @param bool $verifySSL
+     * @param array $headers
      */
-    public function __construct($key = null, $verifySSL = true, array $headers = [])
+    public function __construct(string $key = null, bool $verifySSL = true, array $headers = [])
     {
         $this->key = $key;
         
@@ -72,7 +74,7 @@ class PlacesApi
         
         $this->client = new Client([
             'base_uri' => self::BASE_URL,
-            'headers'  => $headers,
+            'headers' => $headers,
         ]);
     }
     
@@ -83,10 +85,10 @@ class PlacesApi
      * @param string $inputType (textquery or phonenumber)
      * @param array $params
      *
-     * @return \Illuminate\Support\Collection
      * @throws \SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException
+     * @return \Illuminate\Support\Collection
      */
-    public function findPlace($input, $inputType, $params = [])
+    public function findPlace(string $input, string $inputType, array $params = []): Collection
     {
         $this->checkKey();
         
@@ -102,14 +104,14 @@ class PlacesApi
     /**
      * Place Nearby Search Request to google api.
      *
-     * @param $location
-     * @param null $radius
+     * @param string $location
+     * @param string|null $radius
      * @param array $params
      *
-     * @return \Illuminate\Support\Collection
      * @throws \SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException
+     * @return \Illuminate\Support\Collection
      */
-    public function nearbySearch($location, $radius = null, $params = [])
+    public function nearbySearch(string $location, string $radius = null, array $params = []): Collection
     {
         $this->checkKey();
         
@@ -122,13 +124,13 @@ class PlacesApi
     /**
      * Place Text Search Request to google places api.
      *
-     * @param $query
+     * @param string $query
      * @param array $params
      *
-     * @return \Illuminate\Support\Collection
      * @throws \SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException
+     * @return \Illuminate\Support\Collection
      */
-    public function textSearch($query, $params = [])
+    public function textSearch(string $query, array $params = []): Collection
     {
         $this->checkKey();
         
@@ -136,19 +138,18 @@ class PlacesApi
         $response = $this->makeRequest(self::TEXT_SEARCH_URL, $params);
         
         return $this->convertToCollection($response, 'results');
-        
     }
     
     /**
      * Place Details Request to google places api.
      *
-     * @param $placeId
+     * @param string $placeId
      * @param array $params
      *
-     * @return \Illuminate\Support\Collection
      * @throws \SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException
+     * @return \Illuminate\Support\Collection
      */
-    public function placeDetails($placeId, $params = [])
+    public function placeDetails(string $placeId, array $params = []): Collection
     {
         $this->checkKey();
         
@@ -160,13 +161,14 @@ class PlacesApi
     }
     
     /**
-     * @param $photoReference
+     * @param string $photoReference
      * @param array $params
      *
-     * @return mixed|string
+     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException
+     * @return mixed|string
      */
-    public function photo($photoReference, $params = [])
+    public function photo(string $photoReference, array $params = []): string
     {
         $this->checkKey();
         
@@ -192,13 +194,13 @@ class PlacesApi
     /**
      * Place AutoComplete Request to google places api.
      *
-     * @param $input
+     * @param string $input
      * @param array $params
      *
-     * @return \Illuminate\Support\Collection
      * @throws \SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException
+     * @return \Illuminate\Support\Collection
      */
-    public function placeAutocomplete($input, $params = [])
+    public function placeAutocomplete(string $input, array $params = []): Collection
     {
         $this->checkKey();
         
@@ -210,15 +212,15 @@ class PlacesApi
     }
     
     /**
-     * Query AutoComplete Request to the google api.
+     * Query AutoComplete Request to the Google api.
      *
-     * @param $input
+     * @param string $input
      * @param array $params
      *
-     * @return \Illuminate\Support\Collection
      * @throws \SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException
+     * @return \Illuminate\Support\Collection
      */
-    public function queryAutocomplete($input, $params = [])
+    public function queryAutocomplete(string $input, array $params = []): Collection
     {
         $this->checkKey();
         
@@ -230,14 +232,18 @@ class PlacesApi
     }
     
     /**
-     * @param $uri
-     * @param $params
-     * @param $method
+     * @param string $uri
+     * @param array $params
+     * @param string $method
      *
+     * @throws \SKAgarwal\GoogleApi\Exceptions\InvalidRequestException
+     * @throws \SKAgarwal\GoogleApi\Exceptions\NotImplementedException
+     * @throws \SKAgarwal\GoogleApi\Exceptions\OverQueryLimitException
+     * @throws \SKAgarwal\GoogleApi\Exceptions\RequestDeniedException
+     * @throws \SKAgarwal\GoogleApi\Exceptions\UnknownErrorException
      * @return mixed|string
-     * @throws \SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException
      */
-    private function makeRequest($uri, $params, $method = 'get')
+    private function makeRequest(string $uri, array $params, string $method = 'get')
     {
         $options = $this->getOptions($params, $method);
         
@@ -248,7 +254,7 @@ class PlacesApi
         
         $this->setStatus($response['status']);
         
-        switch($response['status']){
+        switch ($response['status']) {
             case 'OK':
             case 'ZERO_RESULTS':
                 return $response;
@@ -286,7 +292,7 @@ class PlacesApi
      *
      * @return \Illuminate\Support\Collection
      */
-    private function convertToCollection(array $data, $index = null)
+    private function convertToCollection(array $data, $index = null): Collection
     {
         $data = collect($data);
         
@@ -314,19 +320,19 @@ class PlacesApi
     }
     
     /**
-     * @return null
+     * @return string|null
      */
-    public function getKey()
+    public function getKey(): string
     {
         return $this->key;
     }
     
     /**
-     * @param null $key
+     * @param string $key
      *
      * @return $this
      */
-    public function setKey($key)
+    public function setKey(string $key): PlacesApi
     {
         $this->key = $key;
         
@@ -346,20 +352,20 @@ class PlacesApi
     /**
      * Prepare the params for the Place Search.
      *
-     * @param $location
-     * @param $radius
-     * @param $params
+     * @param string $location
+     * @param string $radius
+     * @param array $params
      *
-     * @return mixed
      * @throws \SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException
+     * @return mixed
      */
-    private function prepareNearbySearchParams($location, $radius, $params)
+    private function prepareNearbySearchParams(string $location, string $radius, array $params): array
     {
         $params['location'] = $location;
         $params['radius'] = $radius;
         
         if (array_key_exists('rankby', $params)
-            AND $params['rankby'] === 'distance'
+            and $params['rankby'] === 'distance'
         ) {
             unset($params['radius']);
             
@@ -379,7 +385,7 @@ class PlacesApi
      *
      * @return PlacesApi
      */
-    public function verifySSL($verifySSL = true)
+    public function verifySSL(bool $verifySSL = true): PlacesApi
     {
         $this->verifySSL = $verifySSL;
         
@@ -392,7 +398,7 @@ class PlacesApi
      *
      * @return array
      */
-    private function getOptions($params, $method = 'get')
+    private function getOptions(array $params, string $method = 'get'): array
     {
         $options = [
             'query' => [
@@ -422,7 +428,7 @@ class PlacesApi
      *
      * @return PlacesApi
      */
-    public function withHeaders(array $headers)
+    public function withHeaders(array $headers): PlacesApi
     {
         $this->headers = $headers;
         
