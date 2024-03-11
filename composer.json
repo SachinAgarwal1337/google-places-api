@@ -18,13 +18,13 @@
         }
     ],
     "require": {
-        "php": "^7.2.5|^8.0",
-        "illuminate/support": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
-        "illuminate/container": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
-        "guzzlehttp/guzzle": "^6.5.7|^7.4.4|^7.2"
+        "php": "^8.0.2",
+        "illuminate/support": "^9.0|^10.0|^11.0",
+        "illuminate/container": "^9.0|^10.0|^11.0",
+        "guzzlehttp/guzzle": "^7.5"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.0|^9.3|^10.5",
+        "phpunit/phpunit": "^9.5.8|^10.5",
         "skagarwal/reflection": "~1.0"
     },
     "autoload": {
