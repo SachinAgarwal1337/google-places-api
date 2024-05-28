@@ -44,5 +44,7 @@
                 "GooglePlaces": "SKAgarwal\\GoogleApi\\Facade"
             }
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": false
 }
