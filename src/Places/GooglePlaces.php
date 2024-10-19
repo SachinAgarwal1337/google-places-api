@@ -8,6 +8,7 @@ use Saloon\Http\Response;
 use SKAgarwal\GoogleApi\Connector;
 use SKAgarwal\GoogleApi\Places\Requests\FindPlace;
 use SKAgarwal\GoogleApi\Places\Requests\NearbySearch;
+use SKAgarwal\GoogleApi\Places\Requests\Photo;
 use SKAgarwal\GoogleApi\Places\Requests\PlaceAutocomplete;
 use SKAgarwal\GoogleApi\Places\Requests\PlaceDetails;
 use SKAgarwal\GoogleApi\Places\Requests\QueryAutocomplete;
@@ -51,7 +52,7 @@ class GooglePlaces extends Connector
      * @param  array  $params
      *
      * @throws \Saloon\Exceptions\Request\FatalRequestException
-     * @throws \Saloon\Exceptions\Request\RequestException
+     * @throws \Saloon\Exceptions\Request\RequestException|\SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException
      * @return \Saloon\Http\Response
      */
     public function nearbySearch(string $location, ?string $radius = null, array $params = []): Response
@@ -109,5 +110,19 @@ class GooglePlaces extends Connector
     public function textSearch(string $query, array $params = []): Response
     {
         return $this->send(new TextSearch($query, $params));
+    }
+
+    /**
+     * @param  string  $photoReference
+     * @param  array  $params
+     *
+     * @throws \SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException
+     * @throws \Saloon\Exceptions\Request\FatalRequestException
+     * @throws \Saloon\Exceptions\Request\RequestException
+     * @return string|null
+     */
+    public function photo(string $photoReference, array $params = []): ?string
+    {
+        return $this->send(new Photo($photoReference, $params))->getRequest()->getPhotoUrl();
     }
 }

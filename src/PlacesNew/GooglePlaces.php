@@ -78,20 +78,15 @@ class GooglePlaces extends Connector
      * @param  string  $name
      * @param  int|null  $maxHeightPx
      * @param  int|null  $maxWidthPx
-     * @param  bool  $skipHttpRedirect
      *
      * @throws \SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException
      * @throws \Saloon\Exceptions\Request\FatalRequestException
      * @throws \Saloon\Exceptions\Request\RequestException
      * @return \Saloon\Http\Response
      */
-    public function placePhoto(
-        string $name,
-        int $maxHeightPx = null,
-        int $maxWidthPx = null,
-        bool $skipHttpRedirect = false,
-    ): Response {
-        return $this->send(new PlacePhoto($name, $maxHeightPx, $maxWidthPx, $skipHttpRedirect));
+    public function placePhoto(string $name, int $maxHeightPx = null, int $maxWidthPx = null): Response
+    {
+        return $this->send(new PlacePhoto($name, $maxHeightPx, $maxWidthPx));
     }
 
     /**

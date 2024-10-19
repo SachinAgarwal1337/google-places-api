@@ -21,7 +21,6 @@ class PlacePhoto extends Request
      * @param  string  $name
      * @param  int|null  $maxHeightPx
      * @param  int|null  $maxWidthPx
-     * @param  bool  $skipHttpRedirect
      *
      * @throws \SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException
      */
@@ -29,7 +28,6 @@ class PlacePhoto extends Request
         private readonly string $name,
         private readonly ?int $maxHeightPx = null,
         private readonly ?int $maxWidthPx = null,
-        private readonly bool $skipHttpRedirect = false,
     ) {
         if (!$this->maxHeightPx && !$this->maxWidthPx) {
             throw new GooglePlacesApiException('$maxHeightPx or $maxWidthPx param is required');
@@ -52,7 +50,7 @@ class PlacePhoto extends Request
         return array_filter([
             'maxHeightPx' => $this->maxHeightPx,
             'maxWidthPx' => $this->maxWidthPx,
-            'skipHttpRedirect' => $this->skipHttpRedirect,
+            'skipHttpRedirect' => true,
         ], fn ($value) => $value !== null);
     }
 }
