@@ -3,8 +3,11 @@
 namespace SKAgarwal\GoogleApi;
 
 use Saloon\Contracts\Authenticator;
+use Saloon\Enums\PipeOrder;
 use Saloon\Http\Auth\HeaderAuthenticator;
 use Saloon\Http\Connector as SaloonConnector;
+use Saloon\Http\PendingRequest;
+use Saloon\Http\Response;
 use SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException;
 
 abstract class Connector extends SaloonConnector
@@ -20,18 +23,25 @@ abstract class Connector extends SaloonConnector
     protected bool $verifySSL = true;
 
     /**
+     * @var bool
+     */
+    protected bool $throwOnErrors = false;
+
+    /**
      * @param  string|null  $key
      * @param  bool|null  $verifySSL
+     * @param  bool|null  $throwOnErrors
      *
      * @throws \SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException
      */
-    public function __construct(?string $key = null, ?bool $verifySSL = null)
+    public function __construct(?string $key = null, ?bool $verifySSL = null, ?bool $throwOnErrors = null)
     {
         $errorMessage = 'Google Places API KEY is missing.';
 
         if (function_exists('config')) {
             $key = $key ?? config('google.places.key');
             $verifySSL = $verifySSL ?? config('google.places.verify_ssl');
+            $throwOnErrors = $throwOnErrors ?? config('google.throw_on_errors', false);
             $errorMessage = 'Google Places API KEY is not set in google config file.';
         }
 
@@ -41,6 +51,18 @@ abstract class Connector extends SaloonConnector
 
         $this->key = $key;
         $this->verifySSL = $verifySSL ?? true;
+        $this->throwOnErrors = $throwOnErrors ?? false;
+    }
+
+    public function boot(PendingRequest $pendingRequest): void
+    {
+        if ($this->throwOnErrors) {
+            $pendingRequest->middleware()->onResponse(
+                callable: static fn (Response $response) => $response->throw(),
+                name: 'alwaysThrowOnErrors',
+                order: PipeOrder::LAST,
+            );
+        }
     }
 
     /**
@@ -71,6 +93,13 @@ abstract class Connector extends SaloonConnector
     public function verifySSL(bool $verifySSL = true): static
     {
         $this->verifySSL = $verifySSL;
+
+        return $this;
+    }
+
+    public function throwOnErrors(bool $throwOnErrors): static
+    {
+        $this->throwOnErrors = $throwOnErrors;
 
         return $this;
     }
