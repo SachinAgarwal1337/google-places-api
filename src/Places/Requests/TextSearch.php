@@ -1,15 +1,15 @@
 <?php
 
-namespace SKAgarwal\GoogleApi\GoogleMaps\Requests;
+namespace SKAgarwal\GoogleApi\Places\Requests;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
-use SKAgarwal\GoogleApi\GoogleMaps\Endpoint;
+use SKAgarwal\GoogleApi\Places\Endpoint;
 
 /**
- * @see https://developers.google.com/maps/documentation/places/web-service/details
+ * @see https://developers.google.com/maps/documentation/places/web-service/search-text
  */
-class PlaceDetails extends Request
+class TextSearch extends Request
 {
     /**
      * @var \Saloon\Enums\Method
@@ -17,11 +17,11 @@ class PlaceDetails extends Request
     protected Method $method = Method::GET;
 
     /**
-     * @param  string  $placeId
+     * @param  string  $searchQuery
      * @param  array  $params
      */
     public function __construct(
-        private readonly string $placeId,
+        private readonly string $searchQuery,
         private readonly array $params = [],
     ) {}
 
@@ -30,7 +30,7 @@ class PlaceDetails extends Request
      */
     public function resolveEndpoint(): string
     {
-        return Endpoint::PLACE_DETAILS->value;
+        return Endpoint::TEXT_SEARCH->value;
     }
 
     /**
@@ -39,7 +39,7 @@ class PlaceDetails extends Request
     protected function defaultQuery(): array
     {
         return [
-            'place_id' => $this->placeId,
+            'query' => $this->searchQuery,
             ...$this->params,
         ];
     }

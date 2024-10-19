@@ -3,6 +3,9 @@ namespace SKAgarwal\GoogleApi;
 
 use Illuminate\Support\Facades\Facade as BaseFacade;
 
+/**
+ * @deprecated
+ */
 class Facade extends BaseFacade
 {
     /**

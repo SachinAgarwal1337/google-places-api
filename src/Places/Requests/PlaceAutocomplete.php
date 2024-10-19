@@ -1,10 +1,10 @@
 <?php
 
-namespace SKAgarwal\GoogleApi\GoogleMaps\Requests;
+namespace SKAgarwal\GoogleApi\Places\Requests;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
-use SKAgarwal\GoogleApi\GoogleMaps\Endpoint;
+use SKAgarwal\GoogleApi\Places\Endpoint;
 
 /**
  * @see https://developers.google.com/maps/documentation/places/web-service/autocomplete

@@ -1,10 +1,10 @@
 <?php
 
-namespace SKAgarwal\GoogleApi\GoogleMaps\Requests;
+namespace SKAgarwal\GoogleApi\Places\Requests;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
-use SKAgarwal\GoogleApi\GoogleMaps\Endpoint;
+use SKAgarwal\GoogleApi\Places\Endpoint;
 
 /**
  * todo only use it in new one.

@@ -12,6 +12,9 @@ use SKAgarwal\GoogleApi\Exceptions\OverQueryLimitException;
 use SKAgarwal\GoogleApi\Exceptions\RequestDeniedException;
 use SKAgarwal\GoogleApi\Exceptions\UnknownErrorException;
 
+/**
+ * @deprecated Use SKAgarwal\GoogleApi\Places\GooglePlaces instead.
+ */
 class PlacesApi
 {
     public const BASE_URL = 'https://maps.googleapis.com/maps/api/place/';
@@ -322,7 +325,7 @@ class PlacesApi
     /**
      * @return string|null
      */
-    public function getKey(): string
+    public function getKey(): string|null
     {
         return $this->key;
     }

@@ -1,15 +1,15 @@
 <?php
 
-namespace SKAgarwal\GoogleApi\GoogleMaps\Requests;
+namespace SKAgarwal\GoogleApi\Places\Requests;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
-use SKAgarwal\GoogleApi\GoogleMaps\Endpoint;
+use SKAgarwal\GoogleApi\Places\Endpoint;
 
 /**
- * @see https://developers.google.com/maps/documentation/places/web-service/search-nearby
+ * @see https://developers.google.com/maps/documentation/places/web-service/details
  */
-class NearbySearch extends Request
+class PlaceDetails extends Request
 {
     /**
      * @var \Saloon\Enums\Method
@@ -17,13 +17,11 @@ class NearbySearch extends Request
     protected Method $method = Method::GET;
 
     /**
-     * @param  string  $location
-     * @param  string|null  $radius
+     * @param  string  $placeId
      * @param  array  $params
      */
     public function __construct(
-        private readonly string $location,
-        private readonly ?string $radius = null,
+        private readonly string $placeId,
         private readonly array $params = [],
     ) {}
 
@@ -32,7 +30,7 @@ class NearbySearch extends Request
      */
     public function resolveEndpoint(): string
     {
-        return Endpoint::NEARBY_SEARCH->value;
+        return Endpoint::PLACE_DETAILS->value;
     }
 
     /**
@@ -41,8 +39,7 @@ class NearbySearch extends Request
     protected function defaultQuery(): array
     {
         return [
-            'location' => $this->location,
-            'radius' => $this->radius,
+            'place_id' => $this->placeId,
             ...$this->params,
         ];
     }

@@ -1,10 +1,10 @@
 <?php
 
-namespace SKAgarwal\GoogleApi\GoogleMaps;
+namespace SKAgarwal\GoogleApi\Places;
 
 enum Endpoint: string
 {
-    case BASE = 'https://maps.googleapis.com/maps/api/place/';
+    case BASE_URL = 'https://maps.googleapis.com/maps/api/place/';
 
     case NEARBY_SEARCH = 'nearbysearch/json';
 
