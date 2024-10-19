@@ -9,8 +9,6 @@ use SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException;
 use SKAgarwal\GoogleApi\Places\Endpoint;
 
 /**
- * todo only use it in new one.
- *
  * @see https://developers.google.com/maps/documentation/places/web-service/photos
  */
 class Photo extends Request
