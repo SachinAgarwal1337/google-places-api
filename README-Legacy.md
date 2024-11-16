@@ -7,21 +7,10 @@
 
 # Google Places API.
 
-This is a PHP wrapper for **Google Places API Web Service**. And is [Laravel Framework](https://laravel.com) friendly.
+This is a PHP wrapper for **Google Places API Web Service**. And is [Laravel Framework](https://laravel.com/docs/5.2) friendly.
 
-### Version Supports
-| Version  | PHP    | Laravel      | Google Places API                                                                                                                                                          |
-|----------|--------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| ^3.0     | ^8.1   | ^10\|^11     | [Place API](https://developers.google.com/places/web-service/search) \| [Place API (New)](https://developers.google.com/maps/documentation/places/web-service/op-overview) |
-| [^2.2]((https://github.com/SachinAgarwal1337/google-places-api/tree/2.2.0)) | ^8.0.2 | ^9\|^10\|^11 | [Place API](https://developers.google.com/places/web-service/search)                                                                                                       |
-
-
-## Note
-
-V3 is a complete re-write from scratch using [Saloon](https://docs.saloon.dev/) and has major breaking changes. Please refer to the [Upgrade Guide]() for more information.<br>
-But is also backward compatibility with [^2.2]((https://github.com/SachinAgarwal1337/google-places-api/tree/2.2.0))<br>
-Backward compatibility will be removed in the next major release.
-
+## About Package
+With just 2 lines of code you can request to any google places api feature. No need to manually perform any curl requests.
 
 ### The following place requests are available:
 * [Place Search](#place-search) This service gives a list of places based on a user's location or search string.
@@ -44,28 +33,65 @@ composer require skagarwal/google-places-api
 
 **Laravel user can see the [Laravel Usage](#laravel-usage) section**
 
+## Step 1 - Import the class using namespace
 ```php
-use SKAgarwal\GoogleApi\PlacesNew\GooglePlaces;
+use SKAgarwal\GoogleApi\PlacesApi;
+```
+
+## Step 2 - Initiate the object
+```php
+$googlePlaces = new PlacesApi('API KEY');
+```
+
+**Note:** You can also set the **API KEY** after initiating the class using `setKey('KEY')` method. You can chain this with method with any other methods.
+
+## Step 3 - Start Using the Api.
+Example:
+```php
+$response = $googlePlaces->placeAutocomplete('some Place');
+```
+
+As mentioned earlier just 2 lines of code to make any request.
+
+**Full example:**
+```php
+use SKAgarwal\GoogleApi\PlacesApi;
 
 
-public function foo() {
-  $response = GooglePlaces::make(key: 'API KEY', verifySSL: false, throwOnError: false)->autocomplete('some input');
-  
-  $data = $response->array();
+function () {
+  $googlePlaces = new PlacesApi('API_KEY') # line 1
+  $response = $googlePlaces->placeAutocomplete('some input'); # line 2
 }
 
 ```
-
-**Note:** You can also set the **API KEY** after initiating the class using `GooglePlaces::make()->setKey('KEY')` method.
-
 
 ---
 
 <a name=laravel-usage></a>
 # Use with Laravel
+## For Laravel 5.5
+Auto Discovery added.
 
-
+## For Laravel 5.4 and below
 ## Step 1
+Set up the service provider and facade in the **config\app.php**
+```php
+
+'providers' => [
+....
+....
+SKAgarwal\GoogleApi\ServiceProvider::class,
+];
+
+'aliases' => [
+....
+....
+'GooglePlaces' => SKAgarwal\GoogleApi\Facade::class,
+];
+
+```
+
+## Step 2
 publish the config file with following artisan command
 ```
 php artisan vendor:publish --provider="SKAgarwal\GoogleApi\ServiceProvider"
@@ -75,44 +101,38 @@ This will create **google.php** file in the config directory.
 
 Set the *API KEY* in this config file.
 
-## Set 2
-Start making requests
+## Set 3
+Start using the package using Facade.
 
-```php
-use SKAgarwal\GoogleApi\PlacesNew\GooglePlaces;
-
-
-public function foo() {
-  $response = GooglePlaces::make()->autocomplete('some input');
-  
-  $data = $response->collect();
-}
-
+```
+$response = GooglePlaces::placeAutocomplete('some city');
 ```
 
 ---
 # Response
-The response returned is a [Saloon's Response](https://docs.saloon.dev/the-basics/responses#useful-methods). You can refer to the documentation for more information.
+The response returned is a [Laravel's Collection](https://laravel.com/docs/5.2/collections) so that you can perform any of the available collection methods on it.
+
+<blockquote>
+If you are not familiar with <em>Laravel's Collection</em> you can either reference the docs <a href="https://laravel.com/docs/5.2/collections">here</a> or you can use <strong>response</strong> as simple array.
+</blockquote>
 
 ---
 
-# Available Requests
-
-## Places API
+# Available Methods
 
 <a name=place-search></a>
 ## Place Search
-### nearbySearch(string \$location, ?string \$radius = null, array $params = [])
+### nearbySearch($location, $radius = null, $params = [])
 * `location` — The latitude/longitude around which to retrieve place information. This must be specified as latitude, longitude.
-* `radius` — Defines the distance (in meters) within which to return place results. The maximum allowed radius is 50 000 meters. Note that `radius` must not be included if `rankby=distance` (described under **Optional parameters** below) is specified.
+* 'radius' — Defines the distance (in meters) within which to return place results. The maximum allowed radius is 50 000 meters. Note that `radius` must not be included if `rankby=distance` (described under **Optional parameters** below) is specified.
 * If `rankby=distance` (described under **Optional parameters** below) is specified, then one or more of `keyword`, `name`, or `types` is required.
 * `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/search)
 
-### textSearch(string \$query, array \$params = [])
+### textSearch($query, $params = [])
 * `query` — The text string on which to search, for example: "restaurant". The Google Places service will return candidate matches based on this string and order the results based on their perceived relevance.
 * `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/search)
 
-### findPlace(string \$input, string \$inputType, array \$params = []) 
+### findPlace($input, $inputType, $params = []) 
 * `input` — The text input specifying which place to search for (for example, a name, address, or phone number).
 * `inputType` — The type of input. This can be one of either textquery or phonenumber. Phone numbers must be in international format (prefixed by a plus sign ("+"), followed by the country code, then the phone number itself).
 * `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/search#FindPlaceRequests)
@@ -121,7 +141,7 @@ The response returned is a [Saloon's Response](https://docs.saloon.dev/the-basic
 
 <a name=place-details></a>
 # Place Details
-### placeDetails(string \$placeId, array \$params = [])
+### placeDetails($placeId, $params = [])
 * `placeId` — A textual identifier that uniquely identifies a place, returned from a Place Search.
 * `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/details)
 
@@ -129,7 +149,7 @@ The response returned is a [Saloon's Response](https://docs.saloon.dev/the-basic
 
 <a name=place-autocomplete></a>
 # Place Autocomplete
-### placeAutocomplete(string \$input, array \$params = [])
+### placeAutocomplete($input, $params = [])
 * `input` — The text string on which to search. The Place Autocomplete service will return candidate matches based on this string and order results based on their perceived relevance.
 * `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/autocomplete)
 
@@ -137,7 +157,7 @@ The response returned is a [Saloon's Response](https://docs.saloon.dev/the-basic
 
 <a name=query-autocomplete></a>
 # Query Autocomplete
-### queryAutocomplete(string \$input, array \$params = [])
+### queryAutocomplete($input, $params = [])
 * `input` — The text string on which to search. The Places service will return candidate matches based on this string and order results based on their perceived relevance.
 * `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/query)
 
@@ -145,39 +165,59 @@ The response returned is a [Saloon's Response](https://docs.saloon.dev/the-basic
 
 <a name=place-photo></a>
 # Place Photo
-### photo(string $photoReference, array $params = []): ?string
+### photo($photoReference, $params = [])
 * `params` - The set of key-value parameters necessary to add a place to Google. You can refer to the fields on [Google's Official Webpage regarding Place Add](https://developers.google.com/places/web-service/photos)
-* Returns the URL of the photo.
 
 ---
 
 <a name=custom-headers></a>
 # Custom Headers
-### GooglePlaces::make()->headers()->add(string \$key, mixed \$value)
-Call This method before making any request to set custom headers.
+### withHeaders(array $headers)
+Call This method before any other methods to set the headers. You can chain this method.
 
-### Default Headers (Laravel only)
-To have custom headers set for every call, you can set `headers` in the config file
+### new PlacesApi($key = null, $verifySSL = true, array $headers = [])
+To have custom headers set for every call, you can pass 3rd parameter as the headers to class constructor.
+
+**Note:** For Laravel Users, you can set this in config file with key `headers`
 
 ---
 
 <a name=additional-methods></a>
 # Additional Methods
-### setKey(string \$key)
+### getStatus()
+This will return the status of the response send by google api. Use it after making any request.
+
+### getKey()
+This will return the `API KEY` been used with the requests.
+
+### setKey($key)
 This will set the `API KEY`.
 
-### verifySSL(bool \$verifySSL = true)
+### verifySSL($verifySSL = true)
 You can pass `false` to disable Verification of SSL Certification.
 
 **Note:** For Laravel Users, you can set this in config file with key `verify_ssl` 
 
-### throwOnErrors(bool \$throwOnError)
-By default, when request to Google places API fails, no exception is thrown. You can check the request status by calling `$response->status()`  
-You can change this behaviour by setting `throwOnError` to `true`. This will throw an exception if the request fails.
+Or You can Pass the path to the certificate.
+
+<a name=exceptions></a>
+# Exceptions
+Google Places API may throw various exceptions based on the given `$params` or response and is located in the `SKAgarwal\GoogleApi\Exceptions` namespace.
+
+- A `GooglePlacesApiException` is thrown when no `API KEY` is provided or  `$params` is invalid. 
+**Note:** This is the parent class for the preceding exceptions.
+- A `InvalidRequestException` is thrown when the response `status` is `INVALID_REQUEST`
+- A `OverQueryLimitException` is thrown when  the response `status` is `OVER_QUERY_LIMIT`
+- A `RequestDeniedException` is thrown when  the response `status` is `REQUEST_DENIED`
+- A `UnknownErrorException` is thrown when  the response `status` is `UNKNOWN_ERROR`
+- A `NotImplementedException` is thrown when the response cannot be determined.
+
+If any of these exception has been thrown, you can use the `getErrorMessage()` method to get the `error_message` field from the response if any is provided. 
+**Note:** `error_message` field is not guaranteed to be always present, and its content is subject to change.
 
 # Contribution
-Feel free to report issues or make Pull Requests to develop branch.
-If you find this document can be improved in any way, please feel free to open an issue/PR for it.
+Feel free to report issues or make Pull Requests.
+If you find this document can be improved in any way, please feel free to open an issue for it.
 
 # License
 

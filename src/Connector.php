@@ -121,4 +121,16 @@ abstract class Connector extends SaloonConnector
     {
         return new HeaderAuthenticator($this->key, 'X-Goog-Api-Key');
     }
+
+    /**
+     * @return array|mixed[]
+     */
+    protected function defaultHeaders(): array
+    {
+        if (function_exists('config')) {
+            return config('google.headers', []);
+        }
+
+        return [];
+    }
 }

@@ -13,6 +13,11 @@ return [
     ],
 
     /**
+     * Default headers to be sent with each request
+     */
+    'headers' => [],
+
+    /**
      * Throw exceptions when Google API returns an error
      *
      * If set to false, Error message will be returned as response,
