@@ -12,6 +12,9 @@ use SKAgarwal\GoogleApi\Exceptions\OverQueryLimitException;
 use SKAgarwal\GoogleApi\Exceptions\RequestDeniedException;
 use SKAgarwal\GoogleApi\Exceptions\UnknownErrorException;
 
+/**
+ * @deprecated Use SKAgarwal\GoogleApi\Places\GooglePlaces instead.
+ */
 class PlacesApi
 {
     public const BASE_URL = 'https://maps.googleapis.com/maps/api/place/';
@@ -159,14 +162,14 @@ class PlacesApi
         
         return $this->convertToCollection($response);
     }
-    
+
     /**
-     * @param string $photoReference
-     * @param array $params
+     * @param  string  $photoReference
+     * @param  array  $params
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \SKAgarwal\GoogleApi\Exceptions\GooglePlacesApiException
-     * @return mixed|string
+     * @return string
      */
     public function photo(string $photoReference, array $params = []): string
     {
@@ -318,11 +321,11 @@ class PlacesApi
     {
         return $this->status;
     }
-    
+
     /**
      * @return string|null
      */
-    public function getKey(): string
+    public function getKey(): string|null
     {
         return $this->key;
     }

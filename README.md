@@ -1,224 +1,247 @@
-
 [![Latest Stable Version](https://poser.pugx.org/skagarwal/google-places-api/v/stable?format=flat-square)](https://packagist.org/packages/skagarwal/google-places-api)
-[![Latest Unstable Version](https://poser.pugx.org/skagarwal/google-places-api/v/unstable?format=flat-square)](https://packagist.org/packages/skagarwal/google-places-api)
 [![Total Downloads](https://poser.pugx.org/skagarwal/google-places-api/downloads?format=flat-square)](https://packagist.org/packages/skagarwal/google-places-api)
 [![License](https://poser.pugx.org/skagarwal/google-places-api/license?format=flat-square)](https://packagist.org/packages/skagarwal/google-places-api)
 
+# Google Places API for PHP
 
-# Google Places API.
+A PHP wrapper for **Google Places API Web Service**, compatible with [Laravel](https://laravel.com).
 
-This is a PHP wrapper for **Google Places API Web Service**. And is [Laravel Framework](https://laravel.com/docs/5.2) friendly.
+## Version Compatibility
 
-## About Package
-With just 2 lines of code you can request to any google places api feature. No need to manually perform any curl requests.
+| Package Version |  PHP   |     Laravel      | Google Places API                                                                                                                                                           |
+|:---------------:|:------:|:----------------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|      ^3.0       |  ^8.1  |    ^10 \| ^11    | [Places API](https://developers.google.com/places/web-service/search) and [Places API (New)](https://developers.google.com/maps/documentation/places/web-service/op-overview) |
+|      ^2.2       | ^8.0.2 | ^9 \| ^10 \| ^11 | [Places API](https://developers.google.com/places/web-service/search)                                                                                                       |
 
-### The following place requests are available:
-* [Place Search](#place-search) This service gives a list of places based on a user's location or search string.
-* [Place Details](#place-details) This service gives more detailed information about a specific Place, including user reviews.
-* [Place Autocomplete](#place-autocomplete) This service is Used to automatically fill in the name and/or address of a place as you type.
-* [Query Autocomplete](#query-autocomplete) This service is Used to provide a query prediction service for text-based geographic searches, by returning suggested queries as you type.
-* [Place Photo](#place-photo) This gives you access to the millions of photos stored in the Google's Places database
-* [Custom Headers](#custom-headers) Set Custom Headers.
-* [Additional Methods](#additional-methods) Additional Methods Available.
+> [!CAUTION]
+> Version 3 is a complete rewrite using [Saloon](https://docs.saloon.dev/) with breaking changes.    
+> v2.2 API is deprecated and will be removed in next major version. Which means it is backward compatible.   
+> And it is recommended to shift to v3 API before next major release.   
+> You can refer to v2.2 documentation [here](README-Legacy.md).
 
-# Installation
+
+## Installation
 Install it with composer
 ```
 composer require skagarwal/google-places-api
 ```
 
 
-
-# Usage
+## General Usage
 
 **Laravel user can see the [Laravel Usage](#laravel-usage) section**
 
-## Step 1 - Import the class using namespace
 ```php
-use SKAgarwal\GoogleApi\PlacesApi;
-```
-
-## Step 2 - Initiate the object
-```php
-$googlePlaces = new PlacesApi('API KEY');
-```
-
-**Note:** You can also set the **API KEY** after initiating the class using `setKey('KEY')` method. You can chain this with method with any other methods.
-
-## Step 3 - Start Using the Api.
-Example:
-```php
-$response = $googlePlaces->placeAutocomplete('some Place');
-```
-
-As mentioned earlier just 2 lines of code to make any request.
-
-**Full example:**
-```php
-use SKAgarwal\GoogleApi\PlacesApi;
+use SKAgarwal\GoogleApi\PlacesNew\GooglePlaces;
 
 
-function () {
-  $googlePlaces = new PlacesApi('API_KEY') # line 1
-  $response = $googlePlaces->placeAutocomplete('some input'); # line 2
+public function foo() {
+  $response = GooglePlaces::make(key: 'API KEY', verifySSL: false, throwOnError: false)->autocomplete('some input');
+  
+  $data = $response->array();
 }
 
 ```
 
+>You can also set the **API KEY** after initiating the class using `GooglePlaces::make()->setKey('KEY')` method.
+
+
 ---
 
-<a name=laravel-usage></a>
-# Use with Laravel
-## For Laravel 5.5
-Auto Discovery added.
+<a name="laravel-usage"></a>
+## Laravel
 
-## For Laravel 5.4 and below
-## Step 1
-Set up the service provider and facade in the **config\app.php**
-```php
 
-'providers' => [
-....
-....
-SKAgarwal\GoogleApi\ServiceProvider::class,
-];
-
-'aliases' => [
-....
-....
-'GooglePlaces' => SKAgarwal\GoogleApi\Facade::class,
-];
-
-```
-
-## Step 2
+### Step 1
 publish the config file with following artisan command
 ```
 php artisan vendor:publish --provider="SKAgarwal\GoogleApi\ServiceProvider"
 ```
 
-This will create **google.php** file in the config directory.
+This will create **[google.php](config/google.php)** file in the config directory.
 
-Set the *API KEY* in this config file.
+Set the **_API_ KEY** in this config file.
 
-## Set 3
-Start using the package using Facade.
+### Step 2
+Start making requests
 
-```
-$response = GooglePlaces::placeAutocomplete('some city');
+```php
+use SKAgarwal\GoogleApi\PlacesNew\GooglePlaces;
+
+
+public function foo() {
+  $response = GooglePlaces::make()->autocomplete('some input');
+  
+  $data = $response->collect();
+}
+
 ```
 
 ---
 # Response
-The response returned is a [Laravel's Collection](https://laravel.com/docs/5.2/collections) so that you can perform any of the available collection methods on it.
 
-<blockquote>
-If you are not familiar with <em>Laravel's Collection</em> you can either reference the docs <a href="https://laravel.com/docs/5.2/collections">here</a> or you can use <strong>response</strong> as simple array.
-</blockquote>
+The response returned is a [Saloon's Response](https://docs.saloon.dev/the-basics/responses#useful-methods) thus you can use all the methods provided by Saloon.
+    
+```php
+$response->array(); // returns the response as array
+$response->collect(); // returns the response as collection
+$response->json(); // returns the response as json
+$response->status(); // returns the status of the response
+$response->headers(); // returns the headers of the response
+$response->body(); // returns the body of the response
+$response->throw(); // throws an exception if the response is not successful
+```
 
----
+You can refer to Saloon's documentation for more methods.
 
-# Available Methods
-
-<a name=place-search></a>
-## Place Search
-### nearbySearch($location, $radius = null, $params = [])
-* `location` — The latitude/longitude around which to retrieve place information. This must be specified as latitude, longitude.
-* 'radius' — Defines the distance (in meters) within which to return place results. The maximum allowed radius is 50 000 meters. Note that `radius` must not be included if `rankby=distance` (described under **Optional parameters** below) is specified.
-* If `rankby=distance` (described under **Optional parameters** below) is specified, then one or more of `keyword`, `name`, or `types` is required.
-* `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/search)
-
-### textSearch($query, $params = [])
-* `query` — The text string on which to search, for example: "restaurant". The Google Places service will return candidate matches based on this string and order the results based on their perceived relevance.
-* `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/search)
-
-### findPlace($input, $inputType, $params = []) 
-* `input` — The text input specifying which place to search for (for example, a name, address, or phone number).
-* `inputType` — The type of input. This can be one of either textquery or phonenumber. Phone numbers must be in international format (prefixed by a plus sign ("+"), followed by the country code, then the phone number itself).
-* `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/search#FindPlaceRequests)
+> [!IMPORTANT]  
+> By default, no exception is thrown for API errors. You can check the request status with `$response->status()`.  
+> You can also use `GooglePlaces::make()->findPlace()->throw()` to throw an exception if the request fails.
 
 ---
 
-<a name=place-details></a>
-# Place Details
-### placeDetails($placeId, $params = [])
-* `placeId` — A textual identifier that uniquely identifies a place, returned from a Place Search.
-* `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/details)
+# API Reference
+
+This library supports both the **[Places API (original)](#places-original)** and the **[Places API (New)](#places-new)**.
+
+<a name=places-original></a>
+## Places API
+This section covers methods available for original Places API.
+```php
+use SKAgarwal\GoogleApi\Places\GooglePlaces; // Original Places API class
+
+public function foo() {
+  $response = GooglePlaces::make()->nearbySearch('40.748817,-73.985428');
+  
+  $data = $response->array();
+}
+```
+
+### Place Search
+
+#### `findPlace(string $input, string $inputType, array $params = [])`
+- **$input**: Text to search (e.g., name, address).
+- **$inputType**: `textquery` or `phonenumber`.
+- **$params**: Optional parameters. [More info](https://developers.google.com/maps/documentation/places/web-service/search-find-place).
+
+#### `nearbySearch(string $location, ?string $radius = null, array $params = [])`
+- **$location**: Latitude,Longitude coordinates. Order - (lat,lng) (e.g., `40.748817,-73.985428`).
+- **$radius**: Distance in meters (max 50,000). Required unless using `rankby=distance`.
+- **$params**: Optional parameters (e.g., `keyword`, `type`). [More info](https://developers.google.com/maps/documentation/places/web-service/search-nearby).
+
+#### `textSearch(string $query, array $params = [])`
+- **$query**: Search string (e.g., `"restaurant"`).
+- **$params**: Optional parameters. [More info](https://developers.google.com/maps/documentation/places/web-service/search-text).
 
 ---
 
-<a name=place-autocomplete></a>
-# Place Autocomplete
-### placeAutocomplete($input, $params = [])
-* `input` — The text string on which to search. The Place Autocomplete service will return candidate matches based on this string and order results based on their perceived relevance.
-* `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/autocomplete)
+### Place Details
+
+#### `placeDetails(string $placeId, array $params = [])` 
+- **$placeId**: Unique identifier for a place.
+- **$params**: Optional parameters. [More info](https://developers.google.com/maps/documentation/places/web-service/details).
 
 ---
 
-<a name=query-autocomplete></a>
-# Query Autocomplete
-### queryAutocomplete($input, $params = [])
-* `input` — The text string on which to search. The Places service will return candidate matches based on this string and order results based on their perceived relevance.
-* `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/query)
+### Place Autocomplete
+#### `placeAutocomplete(string $input, array $params = [])`
+- **$input**: Text to search (e.g., name, address).
+- **$params**: Optional parameters. [More info](https://developers.google.com/maps/documentation/places/web-service/autocomplete).
 
 ---
 
-<a name=place-photo></a>
-# Place Photo
-### photo($photoReference, $params = [])
-* `params` - The set of key-value parameters necessary to add a place to Google. You can refer to the fields on [Google's Official Webpage regarding Place Add](https://developers.google.com/places/web-service/photos)
+### Query Autocomplete
+#### `queryAutocomplete(string $input, array $params = [])`
+- **$input**: Text to search (e.g., name, address).
+- **$params**: Optional parameters. [More info](https://developers.google.com/maps/documentation/places/web-service/query).
+
+---
+
+### Place Photo
+#### `photo(string $photoReference, array $params = [])`
+- **$photoReference**: Reference to a photo. [More info](https://developers.google.com/maps/documentation/places/web-service/photos#photo_references)  
+- **$params**: Optional parameters. [More info](https://developers.google.com/maps/documentation/places/web-service/photos).
+
+---
+<a name=places-new></a>
+## Places API (New)
+
+This section covers methods available for Places API (New).   
+
+```php
+use SKAgarwal\GoogleApi\PlacesNew\GooglePlaces; // New Places API class
+
+public function foo() {
+  $response = GooglePlaces::make()->nearbySearch(40.748817, -73.985428, 500.0);
+  
+  $data = $response->array();
+}
+```
+---
+
+### Autocomplete
+#### `autocomplete(string $input, bool $includeQueryPredictions = false, ?array $fields = null, array $params = [])`
+- **$input**: Text to search (e.g., name, address).
+- **$fields**: Fields to return. [More info](https://developers.google.com/maps/documentation/places/web-service/choose-fields).
+- **$includeQueryPredictions**: If `true`, the response includes both place and query predictions. The default value is **false**, meaning the response only includes place predictions.
+- **$params**: Optional parameters. [More info](https://developers.google.com/maps/documentation/places/web-service/place-autocomplete).
+
+### Nearby Search
+#### `nearbySearch(float $latitude, float $longitude, float $radius = 0.0, array $fields = ['*'], array $params = [])`
+- **$latitude**: Latitude of the location.
+- **$longitude**: Longitude of the location.
+- **$radius**: The radius must be between **0.0** and **50000.0**, inclusive. The default radius is 0.0. You must set it in your request to a value greater than 0.0.
+- **$fields**: Fields to return. Default is all fields. [More info](https://developers.google.com/maps/documentation/places/web-service/choose-fields).
+- **$params**: Optional parameters. [More info](https://developers.google.com/maps/documentation/places/web-service/nearby-search).
+
+### Place Details
+#### `placeDetails(string $placeId, array $fields = ['*'], array $params = [])`
+- **$placeId**: Unique identifier for a place.
+- **$fields**: Fields to return. Default is all fields. [More info](https://developers.google.com/maps/documentation/places/web-service/choose-fields).
+- **$params**: Optional parameters. [More info](https://developers.google.com/maps/documentation/places/web-service/place-details).
+
+### Text Search
+#### `textSearch(string $textQuery, array $fields = ['*'], array $params = [])`
+- **$textQuery**: Search string (e.g., `"restaurant"`).
+- **$fields**: Fields to return. Default is all fields. [More info](https://developers.google.com/maps/documentation/places/web-service/choose-fields).
+- **$params**: Optional parameters. [More info](https://developers.google.com/maps/documentation/places/web-service/text-search).
+
+### Place Photo
+#### `placePhoto(string $name, int $maxHeightPx = null, int $maxWidthPx = null)`
+- **$name**: A string identifier that uniquely identifies a photo. [More Info](https://developers.google.com/maps/documentation/places/web-service/place-photos#photo-name)
+- **$maxHeightPx**: The maximum desired height of the image in pixels. (Should be between 1 and 4800)
+- **$maxWidthPx**: The maximum desired width of the image in pixels. (Should be between 1 and 4800)
+> [skipHttpRedirect](https://developers.google.com/maps/documentation/places/web-service/place-photos#skiphttpredirect) is set to false internally to get JSON response. This cannot be changed
 
 ---
 
 <a name=custom-headers></a>
 # Custom Headers
-### withHeaders(array $headers)
-Call This method before any other methods to set the headers. You can chain this method.
-
-### new PlacesApi($key = null, $verifySSL = true, array $headers = [])
-To have custom headers set for every call, you can pass 3rd parameter as the headers to class constructor.
-
-**Note:** For Laravel Users, you can set this in config file with key `headers`
+#### Set Custom Headers
+```php
+GooglePlaces::make()->headers()->add('Header-Key', 'Header-Value');
+```
 
 ---
 
 <a name=additional-methods></a>
 # Additional Methods
-### getStatus()
-This will return the status of the response send by google api. Use it after making any request.
 
-### getKey()
-This will return the `API KEY` been used with the requests.
+- **`setKey(string $key)`**: Set the API key.
+- **`getKey(string $key)`**: Get the API key being used.
+- **`verifySSL(bool $verifySSL = true)`**: Enable/disable SSL verification.
+- **`throwOnErrors(bool $throwOnError)`**:
+    - By default, no exception is thrown for API errors. You can check the request status with `$response->status()`.
+    - When `throwOnError` is set to `true`, the library will throw exceptions on API failures.
 
-### setKey($key)
-This will set the `API KEY`.
-
-### verifySSL($verifySSL = true)
-You can pass `false` to disable Verification of SSL Certification.
-
-**Note:** For Laravel Users, you can set this in config file with key `verify_ssl` 
-
-Or You can Pass the path to the certificate.
-
-<a name=exceptions></a>
-# Exceptions
-Google Places API may throw various exceptions based on the given `$params` or response and is located in the `SKAgarwal\GoogleApi\Exceptions` namespace.
-
-- A `GooglePlacesApiException` is thrown when no `API KEY` is provided or  `$params` is invalid. 
-**Note:** This is the parent class for the preceding exceptions.
-- A `InvalidRequestException` is thrown when the response `status` is `INVALID_REQUEST`
-- A `OverQueryLimitException` is thrown when  the response `status` is `OVER_QUERY_LIMIT`
-- A `RequestDeniedException` is thrown when  the response `status` is `REQUEST_DENIED`
-- A `UnknownErrorException` is thrown when  the response `status` is `UNKNOWN_ERROR`
-- A `NotImplementedException` is thrown when the response cannot be determined.
-
-If any of these exception has been thrown, you can use the `getErrorMessage()` method to get the `error_message` field from the response if any is provided. 
-**Note:** `error_message` field is not guaranteed to be always present, and its content is subject to change.
+---
 
 # Contribution
-Feel free to report issues or make Pull Requests.
-If you find this document can be improved in any way, please feel free to open an issue for it.
+- Report issues or contribute to the `develop` branch.
+- Open issues/PRs to improve this documentation.
+
+---
 
 # License
+This package is licensed under the [MIT License](http://opensource.org/licenses/MIT).
 
-The Google Places Api is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
