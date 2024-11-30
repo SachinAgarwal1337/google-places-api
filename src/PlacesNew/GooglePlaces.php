@@ -22,8 +22,8 @@ class GooglePlaces extends Connector
 
     /**
      * @param  string  $input
-     * @param  array  $fields
      * @param  bool  $includeQueryPredictions
+     * @param  array|null  $fields
      * @param  array  $params
      *
      * @throws \Saloon\Exceptions\Request\FatalRequestException
@@ -32,11 +32,11 @@ class GooglePlaces extends Connector
      */
     public function autocomplete(
         string $input,
-        array $fields = ['*'],
         bool $includeQueryPredictions = false,
+        ?array $fields = null,
         array $params = [],
     ): Response {
-        return $this->send(new Autocomplete($input, $fields, $includeQueryPredictions, $params));
+        return $this->send(new Autocomplete($input, $includeQueryPredictions, $fields, $params));
     }
 
     /**

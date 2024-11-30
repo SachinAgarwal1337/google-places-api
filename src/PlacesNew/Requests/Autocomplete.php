@@ -22,14 +22,14 @@ class Autocomplete extends Request implements HasBody
 
     /**
      * @param  string  $input
-     * @param  array  $fields
+     * @param  array|null  $fields
      * @param  bool  $includeQueryPredictions
      * @param  array  $params
      */
     public function __construct(
         private readonly string $input,
-        private readonly array $fields = ['*'],
         private readonly bool $includeQueryPredictions = false,
+        private readonly ?array $fields = null,
         private readonly array $params = [],
     ) {}
 
@@ -46,6 +46,10 @@ class Autocomplete extends Request implements HasBody
      */
     protected function defaultQuery(): array
     {
+        if (is_null($this->fields)) {
+            return [];
+        }
+
         return [
             'fields' => implode(',', $this->fields),
         ];

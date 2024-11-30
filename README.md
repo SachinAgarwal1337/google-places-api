@@ -179,9 +179,9 @@ public function foo() {
 ```
 ---
 
-#### `autocomplete(string $input, array $fields = ['*'], bool $includeQueryPredictions = false, array $params = [])`
+#### `autocomplete(string $input, bool $includeQueryPredictions = false, ?array $fields = null, array $params = [])`
 - **$input**: Text to search (e.g., name, address).
-- **$fields**: Fields to return. Default is all fields. [More info](https://developers.google.com/maps/documentation/places/web-service/choose-fields).
+- **$fields**: Fields to return. [More info](https://developers.google.com/maps/documentation/places/web-service/choose-fields).
 - **$includeQueryPredictions**: If `true`, the response includes both place and query predictions. The default value is **false**, meaning the response only includes place predictions.
 - **$params**: Optional parameters. [More info](https://developers.google.com/maps/documentation/places/web-service/place-autocomplete).
 
