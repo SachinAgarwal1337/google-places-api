@@ -13,8 +13,9 @@ A PHP wrapper for **Google Places API Web Service**, compatible with [Laravel](h
 |      ^3.0       |  ^8.1  |    ^10 \| ^11    | [Places API](https://developers.google.com/places/web-service/search) and [Places API (New)](https://developers.google.com/maps/documentation/places/web-service/op-overview) |
 |      ^2.2       | ^8.0.2 | ^9 \| ^10 \| ^11 | [Places API](https://developers.google.com/places/web-service/search)                                                                                                       |
 
-> **Note**:  
+> [!CAUTION]
 > Version 3 is a complete rewrite using [Saloon](https://docs.saloon.dev/) with breaking changes. v2.2 API is deprecated and will be removed in next major version. Which means it is backward compatible. But it is recommended to shift to v3 API before next major release.
+> You can refer to v2.2 documentation [here](README-Legacy.md).
 
 
 ## Installation
@@ -55,9 +56,9 @@ publish the config file with following artisan command
 php artisan vendor:publish --provider="SKAgarwal\GoogleApi\ServiceProvider"
 ```
 
-This will create **google.php** file in the config directory.
+This will create **[google.php](config/google.php)** file in the config directory.
 
-Set the *API KEY* in this config file.
+Set the **_API_ KEY** in this config file.
 
 ### Step 2
 Start making requests
@@ -91,7 +92,7 @@ $response->throw(); // throws an exception if the response is not successful
 
 You can refer to Saloon's documentation for more methods.
 
-> **Note**:  
+> [!IMPORTANT]  
 > By default, no exception is thrown for API errors. You can check the request status with `$response->status()`.  
 > You can also use `GooglePlaces::make()->findPlace()->throw()` to throw an exception if the request fails.
 
@@ -103,7 +104,18 @@ This library supports both the **[Places API (original)](#places-original)** and
 
 <a name=places-original></a>
 ## Places API
-This section covers methods available for original Places API.   
+This section covers methods available for original Places API.
+```php
+use SKAgarwal\GoogleApi\Places\GooglePlaces; // Original Places API class
+
+public function foo() {
+  $response = GooglePlaces::make()->nearbySearch('40.748817,-73.985428');
+  
+  $data = $response->array();
+}
+
+```
+
 Use `SKAgarwal\GoogleApi\Places\GooglePlaces::make()` to create an instance of the Places API.   
 Eg: `GooglePlaces::make()->nearbySearch('40.748817,-73.985428');`
 
@@ -157,17 +169,18 @@ Eg: `GooglePlaces::make()->nearbySearch('40.748817,-73.985428');`
 ## Places API (New)
 
 This section covers methods available for Places API (New).   
-Use `SKAgarwal\GoogleApi\PlacesNew\GooglePlaces::make()` to create an instance of the Places API.   
-Eg: `GooglePlaces::make()->nearbySearch(40.748817, -73.985428, 500.0);`
 
----
-
-<a name=custom-headers></a>
-# Custom Headers
-#### Set Custom Headers
 ```php
-GooglePlaces::make()->headers()->add('Header-Key', 'Header-Value');
+use SKAgarwal\GoogleApi\PlacesNew\GooglePlaces; // New Places API class
+
+public function foo() {
+  $response = GooglePlaces::make()->nearbySearch(40.748817, -73.985428, 500.0);
+  
+  $data = $response->array();
+}
+
 ```
+---
 
 #### `autocomplete(string $input, array $fields = ['*'], bool $includeQueryPredictions = false, array $params = [])`
 - **$input**: Text to search (e.g., name, address).
@@ -197,6 +210,15 @@ GooglePlaces::make()->headers()->add('Header-Key', 'Header-Value');
 - **$maxHeightPx**: The maximum desired height of the image in pixels. (Should be between 1 and 4800)
 - **$maxWidthPx**: The maximum desired width of the image in pixels. (Should be between 1 and 4800)
 > [skipHttpRedirect](https://developers.google.com/maps/documentation/places/web-service/place-photos#skiphttpredirect) is set to false internally to get JSON response. This cannot be changed
+
+---
+
+<a name=custom-headers></a>
+# Custom Headers
+#### Set Custom Headers
+```php
+GooglePlaces::make()->headers()->add('Header-Key', 'Header-Value');
+```
 
 ---
 
