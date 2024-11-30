@@ -14,7 +14,9 @@ A PHP wrapper for **Google Places API Web Service**, compatible with [Laravel](h
 |      ^2.2       | ^8.0.2 | ^9 \| ^10 \| ^11 | [Places API](https://developers.google.com/places/web-service/search)                                                                                                       |
 
 > [!CAUTION]
-> Version 3 is a complete rewrite using [Saloon](https://docs.saloon.dev/) with breaking changes. v2.2 API is deprecated and will be removed in next major version. Which means it is backward compatible. But it is recommended to shift to v3 API before next major release.
+> Version 3 is a complete rewrite using [Saloon](https://docs.saloon.dev/) with breaking changes.    
+> v2.2 API is deprecated and will be removed in next major version. Which means it is backward compatible.   
+> And it is recommended to shift to v3 API before next major release.   
 > You can refer to v2.2 documentation [here](README-Legacy.md).
 
 
@@ -113,11 +115,7 @@ public function foo() {
   
   $data = $response->array();
 }
-
 ```
-
-Use `SKAgarwal\GoogleApi\Places\GooglePlaces::make()` to create an instance of the Places API.   
-Eg: `GooglePlaces::make()->nearbySearch('40.748817,-73.985428');`
 
 ### Place Search
 
@@ -178,7 +176,6 @@ public function foo() {
   
   $data = $response->array();
 }
-
 ```
 ---
 
