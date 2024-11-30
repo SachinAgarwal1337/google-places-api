@@ -179,12 +179,14 @@ public function foo() {
 ```
 ---
 
+### Autocomplete
 #### `autocomplete(string $input, bool $includeQueryPredictions = false, ?array $fields = null, array $params = [])`
 - **$input**: Text to search (e.g., name, address).
 - **$fields**: Fields to return. [More info](https://developers.google.com/maps/documentation/places/web-service/choose-fields).
 - **$includeQueryPredictions**: If `true`, the response includes both place and query predictions. The default value is **false**, meaning the response only includes place predictions.
 - **$params**: Optional parameters. [More info](https://developers.google.com/maps/documentation/places/web-service/place-autocomplete).
 
+### Nearby Search
 #### `nearbySearch(float $latitude, float $longitude, float $radius = 0.0, array $fields = ['*'], array $params = [])`
 - **$latitude**: Latitude of the location.
 - **$longitude**: Longitude of the location.
@@ -192,16 +194,19 @@ public function foo() {
 - **$fields**: Fields to return. Default is all fields. [More info](https://developers.google.com/maps/documentation/places/web-service/choose-fields).
 - **$params**: Optional parameters. [More info](https://developers.google.com/maps/documentation/places/web-service/nearby-search).
 
+### Place Details
 #### `placeDetails(string $placeId, array $fields = ['*'], array $params = [])`
 - **$placeId**: Unique identifier for a place.
 - **$fields**: Fields to return. Default is all fields. [More info](https://developers.google.com/maps/documentation/places/web-service/choose-fields).
 - **$params**: Optional parameters. [More info](https://developers.google.com/maps/documentation/places/web-service/place-details).
 
+### Text Search
 #### `textSearch(string $textQuery, array $fields = ['*'], array $params = [])`
 - **$textQuery**: Search string (e.g., `"restaurant"`).
 - **$fields**: Fields to return. Default is all fields. [More info](https://developers.google.com/maps/documentation/places/web-service/choose-fields).
 - **$params**: Optional parameters. [More info](https://developers.google.com/maps/documentation/places/web-service/text-search).
 
+### Place Photo
 #### `placePhoto(string $name, int $maxHeightPx = null, int $maxWidthPx = null)`
 - **$name**: A string identifier that uniquely identifies a photo. [More Info](https://developers.google.com/maps/documentation/places/web-service/place-photos#photo-name)
 - **$maxHeightPx**: The maximum desired height of the image in pixels. (Should be between 1 and 4800)
