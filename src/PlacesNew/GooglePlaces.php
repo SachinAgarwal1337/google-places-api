@@ -84,7 +84,7 @@ class GooglePlaces extends Connector
      * @throws \Saloon\Exceptions\Request\RequestException
      * @return \Saloon\Http\Response
      */
-    public function placePhoto(string $name, int $maxHeightPx = null, int $maxWidthPx = null): Response
+    public function placePhoto(string $name, ?int $maxHeightPx = null, ?int $maxWidthPx = null): Response
     {
         return $this->send(new PlacePhoto($name, $maxHeightPx, $maxWidthPx));
     }
