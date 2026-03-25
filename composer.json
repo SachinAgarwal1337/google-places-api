@@ -22,7 +22,7 @@
         "illuminate/support": "^10.0|^11.0|^12.0",
         "illuminate/container": "^10.0|^11.0|^12.0",
         "guzzlehttp/guzzle": "^7.5",
-        "saloonphp/saloon": "^3.0"
+        "saloonphp/saloon": "^4.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5.8|^10.5",
